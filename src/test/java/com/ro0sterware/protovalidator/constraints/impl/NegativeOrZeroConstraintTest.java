@@ -16,8 +16,8 @@ class NegativeOrZeroConstraintTest extends AbstractFieldConstraintTest {
   }
 
   @Override
-  Message getTestMessage() {
-    return TestMessageOuterClass.TestMessage.getDefaultInstance();
+  Message.Builder getTestMessageBuilder() {
+    return TestMessageOuterClass.TestMessage.newBuilder();
   }
 
   @Override

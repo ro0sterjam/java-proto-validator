@@ -26,7 +26,7 @@ abstract class AbstractFieldConstraintTest {
 
   abstract FieldConstraint getTestFieldConstraint();
 
-  abstract Message getTestMessage();
+  abstract Message.Builder getTestMessageBuilder();
 
   abstract String[] getSupportedFields();
 
@@ -59,7 +59,7 @@ abstract class AbstractFieldConstraintTest {
 
   @ParameterizedTest
   @MethodSource("provideInvalidFieldValues")
-  void testValidate_onTrueBoolField_returnsViolation(String field, Object value) {
+  void testValidate_forInvalidMessage_returnsViolation(String field, Object value) {
     ProtobufValidator validator = createValidatorForField(field);
     Message message = createMessageWithFieldValue(field, value);
     assertThat(validator.validate(message)).containsOnly(getExpectedMessageViolation(field, value));
@@ -68,25 +68,22 @@ abstract class AbstractFieldConstraintTest {
   private Message createMessageWithFieldValue(String field, Object value) {
     String protoFieldName = ProtoFieldUtils.toLowerSnakeCase(field);
     Descriptors.FieldDescriptor fieldDescriptor =
-        getTestMessage().getDescriptorForType().findFieldByName(protoFieldName);
+        getTestMessageBuilder().getDescriptorForType().findFieldByName(protoFieldName);
     if (value == null) {
-      return getTestMessage().newBuilderForType().clearField(fieldDescriptor).build();
+      return getTestMessageBuilder().clearField(fieldDescriptor).build();
     } else if (value instanceof ProtocolMessageEnum) {
       Descriptors.EnumValueDescriptor valueDescriptor =
           ((ProtocolMessageEnum) value).getValueDescriptor();
-      return getTestMessage()
-          .newBuilderForType()
-          .setField(fieldDescriptor, valueDescriptor)
-          .build();
+      return getTestMessageBuilder().setField(fieldDescriptor, valueDescriptor).build();
     } else {
-      return getTestMessage().newBuilderForType().setField(fieldDescriptor, value).build();
+      return getTestMessageBuilder().setField(fieldDescriptor, value).build();
     }
   }
 
   private ProtobufValidator createValidatorForField(String field) {
     return ProtobufValidator.createBuilder()
         .registerValidator(
-            MessageValidator.createBuilder(getTestMessage().getDescriptorForType())
+            MessageValidator.createBuilder(getTestMessageBuilder().getDescriptorForType())
                 .addFieldConstraint(field, getTestFieldConstraint())
                 .build())
         .build();
@@ -99,7 +96,7 @@ abstract class AbstractFieldConstraintTest {
   private Stream<String> provideNonSupportedFields() {
     Set<String> supportedFieldNames =
         Arrays.stream(getSupportedFields()).collect(Collectors.toSet());
-    return getTestMessage().getDescriptorForType().getFields().stream()
+    return getTestMessageBuilder().getDescriptorForType().getFields().stream()
         .map(Descriptors.FieldDescriptor::getJsonName)
         .filter(fieldName -> !supportedFieldNames.contains(fieldName));
   }

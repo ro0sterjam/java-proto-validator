@@ -16,7 +16,7 @@ public abstract class AbstractBooleanFieldCondition extends AbstractFieldConditi
   protected boolean supportsField(Descriptors.FieldDescriptor fieldDescriptor) {
     return fieldDescriptor.getType() == Descriptors.FieldDescriptor.Type.BOOL
         || (fieldDescriptor.getType() == Descriptors.FieldDescriptor.Type.MESSAGE
-            || fieldDescriptor.getMessageType().equals(BoolValue.getDescriptor()));
+            && fieldDescriptor.getMessageType().equals(BoolValue.getDescriptor()));
   }
 
   @Override

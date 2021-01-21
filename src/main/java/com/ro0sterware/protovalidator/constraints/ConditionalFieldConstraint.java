@@ -38,6 +38,11 @@ public class ConditionalFieldConstraint implements FieldConstraint {
     return fieldConstraint.getViolationErrorCode();
   }
 
+  @Override
+  public Map<String, Object> getViolationMessageParams() {
+    return fieldConstraint.getViolationMessageParams();
+  }
+
   public String getConditionCode() {
     return condition.getConditionCode();
   }
