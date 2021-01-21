@@ -8,11 +8,11 @@ import java.util.Collections;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.provider.Arguments;
 
-class IsSetConstraintTest extends AbstractFieldConstraintTest {
+class IsNotSetConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   FieldConstraint getTestFieldConstraint() {
-    return FieldConstraints.IS_SET;
+    return FieldConstraints.IS_NOT_SET;
   }
 
   @Override
@@ -43,6 +43,26 @@ class IsSetConstraintTest extends AbstractFieldConstraintTest {
   @Override
   Stream<Arguments> provideValidFieldValues() {
     return Stream.of(
+        Arguments.of("testEnumField", null),
+        Arguments.of("testNestedMessageField", null),
+        Arguments.of("firstOneofField", null),
+        Arguments.of("doubleWrapperField", null),
+        Arguments.of("floatWrapperField", null),
+        Arguments.of("int64WrapperField", null),
+        Arguments.of("uint64WrapperField", null),
+        Arguments.of("int32WrapperField", null),
+        Arguments.of("uint32WrapperField", null),
+        Arguments.of("boolWrapperField", null),
+        Arguments.of("boolWrapperField", null),
+        Arguments.of("stringWrapperField", null),
+        Arguments.of("bytesWrapperField", null),
+        Arguments.of("timestampField", null),
+        Arguments.of("durationField", null));
+  }
+
+  @Override
+  Stream<Arguments> provideInvalidFieldValues() {
+    return Stream.of(
         Arguments.of(
             "testEnumField", TestMessageOuterClass.TestEnum.TEST_ENUM_FIRST.getValueDescriptor()),
         Arguments.of(
@@ -65,32 +85,12 @@ class IsSetConstraintTest extends AbstractFieldConstraintTest {
   }
 
   @Override
-  Stream<Arguments> provideInvalidFieldValues() {
-    return Stream.of(
-        Arguments.of("testEnumField", null),
-        Arguments.of("testNestedMessageField", null),
-        Arguments.of("firstOneofField", null),
-        Arguments.of("doubleWrapperField", null),
-        Arguments.of("floatWrapperField", null),
-        Arguments.of("int64WrapperField", null),
-        Arguments.of("uint64WrapperField", null),
-        Arguments.of("int32WrapperField", null),
-        Arguments.of("uint32WrapperField", null),
-        Arguments.of("boolWrapperField", null),
-        Arguments.of("boolWrapperField", null),
-        Arguments.of("stringWrapperField", null),
-        Arguments.of("bytesWrapperField", null),
-        Arguments.of("timestampField", null),
-        Arguments.of("durationField", null));
-  }
-
-  @Override
   MessageViolation getExpectedMessageViolation(String field, Object value) {
     return new MessageViolation(
         field,
-        new MessageViolation.ErrorMessage("field.violations.IsSet", Collections.emptyMap()),
+        new MessageViolation.ErrorMessage("field.violations.IsNotSet", Collections.emptyMap()),
         null,
-        "must be set",
+        "must not be set",
         value);
   }
 }

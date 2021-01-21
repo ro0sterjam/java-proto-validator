@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
-import com.google.protobuf.ProtocolMessageEnum;
 import com.ro0sterware.protovalidator.MessageValidator;
 import com.ro0sterware.protovalidator.MessageViolation;
 import com.ro0sterware.protovalidator.ProtobufValidator;
@@ -71,10 +70,6 @@ abstract class AbstractFieldConstraintTest {
         getTestMessageBuilder().getDescriptorForType().findFieldByName(protoFieldName);
     if (value == null) {
       return getTestMessageBuilder().clearField(fieldDescriptor).build();
-    } else if (value instanceof ProtocolMessageEnum) {
-      Descriptors.EnumValueDescriptor valueDescriptor =
-          ((ProtocolMessageEnum) value).getValueDescriptor();
-      return getTestMessageBuilder().setField(fieldDescriptor, valueDescriptor).build();
     } else {
       return getTestMessageBuilder().setField(fieldDescriptor, value).build();
     }
