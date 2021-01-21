@@ -3,14 +3,13 @@ package com.ro0sterware.protovalidator.constraints;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
+import javax.annotation.Nullable;
 
 /**
  * Abstract constraint for {@link Descriptors.FieldDescriptor.Type#BOOL} and {@link BoolValue}
  * wrapper typed fields.
- *
- * <p>Expends {@link NullSafeFieldConstraint} and therefore is "Valid" even if value is `null`.
  */
-public abstract class AbstractBooleanConstraint extends NullSafeFieldConstraint {
+public abstract class AbstractBooleanConstraint implements FieldConstraint {
 
   @Override
   public boolean supportsField(Descriptors.FieldDescriptor fieldDescriptor) {
@@ -20,10 +19,10 @@ public abstract class AbstractBooleanConstraint extends NullSafeFieldConstraint 
   }
 
   @Override
-  protected boolean nullSafeIsValid(
-      Message message, Descriptors.FieldDescriptor fieldDescriptor, Object value) {
-    if (value instanceof Boolean) {
-      return isValid(message, fieldDescriptor, (boolean) value);
+  public boolean isValid(
+      Message message, Descriptors.FieldDescriptor fieldDescriptor, @Nullable Object value) {
+    if (value == null || value instanceof Boolean) {
+      return isValid(message, fieldDescriptor, (Boolean) value);
     } else if (value instanceof BoolValue) {
       return isValid(message, fieldDescriptor, ((BoolValue) value).getValue());
     } else {
@@ -32,5 +31,5 @@ public abstract class AbstractBooleanConstraint extends NullSafeFieldConstraint 
   }
 
   protected abstract boolean isValid(
-      Message message, Descriptors.FieldDescriptor fieldDescriptor, boolean value);
+      Message message, Descriptors.FieldDescriptor fieldDescriptor, @Nullable Boolean value);
 }
