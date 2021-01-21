@@ -32,7 +32,7 @@ public class PatternConstraint extends AbstractStringConstraint {
 
   @Override
   public Map<String, Object> getViolationMessageParams() {
-    final HashMap<String, Object> params = new HashMap<>();
+    final Map<String, Object> params = new HashMap<>();
     params.put("regexp", pattern.pattern());
     return Collections.unmodifiableMap(params);
   }

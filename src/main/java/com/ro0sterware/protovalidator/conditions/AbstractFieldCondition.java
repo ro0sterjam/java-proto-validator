@@ -40,7 +40,7 @@ public abstract class AbstractFieldCondition implements ApplyCondition {
 
   @Override
   public Map<String, Object> getConditionMessageParams() {
-    final HashMap<String, Object> params = new HashMap<>();
+    final Map<String, Object> params = new HashMap<>();
     params.put("field", field);
     return Collections.unmodifiableMap(params);
   }

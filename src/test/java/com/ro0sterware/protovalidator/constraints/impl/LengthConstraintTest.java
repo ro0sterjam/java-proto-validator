@@ -6,6 +6,7 @@ import com.ro0sterware.protovalidator.MessageViolation;
 import com.ro0sterware.protovalidator.TestMessageOuterClass;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -23,7 +24,7 @@ class LengthConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   String[] getSupportedFields() {
-    return new String[] {"stringField", "firstOneOfField", "stringWrapperField"};
+    return new String[] {"stringField", "firstOneofField", "stringWrapperField"};
   }
 
   @Override
@@ -33,11 +34,11 @@ class LengthConstraintTest extends AbstractFieldConstraintTest {
         Arguments.of("stringField", "12345678901"),
         Arguments.of("stringField", "1234567890123456789"),
         Arguments.of("stringField", "12345678901234567890"),
-        Arguments.of("firstOneOfField", null),
-        Arguments.of("firstOneOfField", StringValue.of("1234567890")),
-        Arguments.of("firstOneOfField", StringValue.of("12345678901")),
-        Arguments.of("firstOneOfField", StringValue.of("1234567890123456789")),
-        Arguments.of("firstOneOfField", StringValue.of("12345678901234567890")),
+        Arguments.of("firstOneofField", null),
+        Arguments.of("firstOneofField", StringValue.of("1234567890")),
+        Arguments.of("firstOneofField", StringValue.of("12345678901")),
+        Arguments.of("firstOneofField", StringValue.of("1234567890123456789")),
+        Arguments.of("firstOneofField", StringValue.of("12345678901234567890")),
         Arguments.of("stringWrapperField", null),
         Arguments.of("stringWrapperField", StringValue.of("1234567890")),
         Arguments.of("stringWrapperField", StringValue.of("12345678901")),
@@ -50,15 +51,15 @@ class LengthConstraintTest extends AbstractFieldConstraintTest {
     return Stream.of(
         Arguments.of("stringField", "123456789"),
         Arguments.of("stringField", "123456789012345678901"),
-        Arguments.of("firstOneOfField", StringValue.of("123456789")),
-        Arguments.of("firstOneOfField", StringValue.of("123456789012345678901")),
+        Arguments.of("firstOneofField", StringValue.of("123456789")),
+        Arguments.of("firstOneofField", StringValue.of("123456789012345678901")),
         Arguments.of("stringWrapperField", StringValue.of("123456789")),
         Arguments.of("stringWrapperField", StringValue.of("123456789012345678901")));
   }
 
   @Override
   MessageViolation getExpectedMessageViolation(String field, Object value) {
-    HashMap<String, Object> errorCodeParams = new HashMap<>();
+    Map<String, Object> errorCodeParams = new HashMap<>();
     errorCodeParams.put("min", 10);
     errorCodeParams.put("max", 20);
     return new MessageViolation(

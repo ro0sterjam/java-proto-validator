@@ -46,7 +46,7 @@ public class ExpressionCondition implements ApplyCondition {
 
   @Override
   public Map<String, Object> getConditionMessageParams() {
-    final HashMap<String, Object> params = new HashMap<>();
+    final Map<String, Object> params = new HashMap<>();
     params.put("expression", expression.getExpressionString());
     return Collections.unmodifiableMap(params);
   }

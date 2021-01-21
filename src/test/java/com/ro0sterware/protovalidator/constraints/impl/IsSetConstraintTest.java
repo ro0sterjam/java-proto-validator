@@ -25,7 +25,7 @@ class IsSetConstraintTest extends AbstractFieldConstraintTest {
     return new String[] {
       "testEnumField",
       "testNestedMessageField",
-      "firstOneOfField",
+      "firstOneofField",
       "doubleWrapperField",
       "floatWrapperField",
       "int64WrapperField",
@@ -47,7 +47,7 @@ class IsSetConstraintTest extends AbstractFieldConstraintTest {
         Arguments.of("testEnumField", TestMessageOuterClass.TestEnum.TEST_ENUM_SECOND),
         Arguments.of(
             "testNestedMessageField", TestMessageOuterClass.TestNestedMessage.getDefaultInstance()),
-        Arguments.of("firstOneOfField", StringValue.of("someValue")),
+        Arguments.of("firstOneofField", StringValue.of("someValue")),
         Arguments.of("doubleWrapperField", DoubleValue.of(33.22)),
         Arguments.of("floatWrapperField", FloatValue.of(33.22f)),
         Arguments.of("int64WrapperField", Int64Value.of(33)),
@@ -67,7 +67,7 @@ class IsSetConstraintTest extends AbstractFieldConstraintTest {
     return Stream.of(
         Arguments.of("testEnumField", null),
         Arguments.of("testNestedMessageField", null),
-        Arguments.of("firstOneOfField", null),
+        Arguments.of("firstOneofField", null),
         Arguments.of("doubleWrapperField", null),
         Arguments.of("floatWrapperField", null),
         Arguments.of("int64WrapperField", null),

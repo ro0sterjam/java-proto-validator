@@ -43,7 +43,7 @@ public class OneOfIsSetConstraint implements MessageConstraint {
         oneOfDescriptor.getFields().stream()
             .map(Descriptors.FieldDescriptor::getJsonName)
             .collect(Collectors.toList());
-    final HashMap<String, Object> params = new HashMap<>();
+    final Map<String, Object> params = new HashMap<>();
     params.put("fields", fields);
     return Collections.unmodifiableMap(params);
   }

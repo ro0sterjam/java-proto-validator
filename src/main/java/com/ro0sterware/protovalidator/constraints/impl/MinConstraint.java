@@ -56,7 +56,7 @@ public class MinConstraint extends AbstractNumberConstraint {
 
   @Override
   public Map<String, Object> getViolationMessageParams() {
-    final HashMap<String, Object> params = new HashMap<>();
+    final Map<String, Object> params = new HashMap<>();
     params.put("min", min);
     return Collections.unmodifiableMap(params);
   }

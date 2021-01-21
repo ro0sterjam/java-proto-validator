@@ -26,8 +26,8 @@ message TestMessage {
     TestNestedMessage test_nested_message_field = 17;
     repeated string repeated_field = 18;
     oneof oneof_field {
-      google.protobuf.StringValue first_one_of_field = 19;
-      int32 second_one_of_field = 20;
+      google.protobuf.StringValue first_oneof_field = 19;
+      int32 second_oneof_field = 20;
     }
     google.protobuf.DoubleValue double_wrapper_field = 21;
     google.protobuf.FloatValue float_wrapper_field = 22;

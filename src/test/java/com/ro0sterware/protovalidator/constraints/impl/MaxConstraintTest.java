@@ -5,6 +5,7 @@ import com.ro0sterware.protovalidator.MessageViolation;
 import com.ro0sterware.protovalidator.TestMessageOuterClass;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -31,7 +32,7 @@ class MaxConstraintTest extends AbstractFieldConstraintTest {
       "sint64Field",
       "sfixed32Field",
       "sfixed64Field",
-      "secondOneOfField",
+      "secondOneofField",
       "doubleWrapperField",
       "floatWrapperField",
       "int64WrapperField",
@@ -50,7 +51,7 @@ class MaxConstraintTest extends AbstractFieldConstraintTest {
         Arguments.of("sint64Field", 10L),
         Arguments.of("sfixed32Field", 10),
         Arguments.of("sfixed64Field", 10L),
-        Arguments.of("secondOneOfField", 10),
+        Arguments.of("secondOneofField", 10),
         Arguments.of("doubleWrapperField", DoubleValue.of(10.0)),
         Arguments.of("doubleWrapperField", null),
         Arguments.of("floatWrapperField", FloatValue.of(10.0f)),
@@ -72,7 +73,7 @@ class MaxConstraintTest extends AbstractFieldConstraintTest {
         Arguments.of("sint64Field", 11L),
         Arguments.of("sfixed32Field", 11),
         Arguments.of("sfixed64Field", 11L),
-        Arguments.of("secondOneOfField", 11),
+        Arguments.of("secondOneofField", 11),
         Arguments.of("doubleWrapperField", DoubleValue.of(10.1)),
         Arguments.of("floatWrapperField", FloatValue.of(10.1f)),
         Arguments.of("int64WrapperField", Int64Value.of(11L)),
@@ -81,7 +82,7 @@ class MaxConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   MessageViolation getExpectedMessageViolation(String field, Object value) {
-    HashMap<String, Object> errorCodeParams = new HashMap<>();
+    Map<String, Object> errorCodeParams = new HashMap<>();
     errorCodeParams.put("max", 10L);
     return new MessageViolation(
         field,

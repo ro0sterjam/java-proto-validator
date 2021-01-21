@@ -7,6 +7,7 @@ import com.ro0sterware.protovalidator.constraints.FieldConstraint;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -43,7 +44,7 @@ class SizeConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   MessageViolation getExpectedMessageViolation(String field, Object value) {
-    HashMap<String, Object> errorCodeParams = new HashMap<>();
+    Map<String, Object> errorCodeParams = new HashMap<>();
     errorCodeParams.put("min", 2);
     errorCodeParams.put("max", 3);
     return new MessageViolation(

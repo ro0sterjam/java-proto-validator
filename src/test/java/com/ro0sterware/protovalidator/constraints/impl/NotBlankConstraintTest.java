@@ -23,14 +23,14 @@ class NotBlankConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   String[] getSupportedFields() {
-    return new String[] {"stringField", "firstOneOfField", "stringWrapperField"};
+    return new String[] {"stringField", "firstOneofField", "stringWrapperField"};
   }
 
   @Override
   Stream<Arguments> provideValidFieldValues() {
     return Stream.of(
         Arguments.of("stringField", "sdfdsf"),
-        Arguments.of("firstOneOfField", StringValue.of("sdfsdf")),
+        Arguments.of("firstOneofField", StringValue.of("sdfsdf")),
         Arguments.of("stringWrapperField", StringValue.of("xcvxcv")));
   }
 
@@ -39,9 +39,9 @@ class NotBlankConstraintTest extends AbstractFieldConstraintTest {
     return Stream.of(
         Arguments.of("stringField", ""),
         Arguments.of("stringField", "   "),
-        Arguments.of("firstOneOfField", null),
-        Arguments.of("firstOneOfField", StringValue.of("")),
-        Arguments.of("firstOneOfField", StringValue.of("   ")),
+        Arguments.of("firstOneofField", null),
+        Arguments.of("firstOneofField", StringValue.of("")),
+        Arguments.of("firstOneofField", StringValue.of("   ")),
         Arguments.of("stringWrapperField", null),
         Arguments.of("stringWrapperField", StringValue.of("")),
         Arguments.of("stringWrapperField", StringValue.of("  ")));

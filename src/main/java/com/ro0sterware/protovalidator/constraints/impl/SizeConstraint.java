@@ -38,7 +38,7 @@ public class SizeConstraint extends AbstractCollectionConstraint {
 
   @Override
   public Map<String, Object> getViolationMessageParams() {
-    final HashMap<String, Object> params = new HashMap<>();
+    final Map<String, Object> params = new HashMap<>();
     params.put("min", min);
     params.put("max", max);
     return Collections.unmodifiableMap(params);
