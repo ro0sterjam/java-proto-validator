@@ -10,8 +10,8 @@ public class FieldConstraints {
   /** Validates that a field is not set */
   public static final FieldConstraint IS_NOT_SET = new IsNotSetConstraint();
 
-  /** Marks field to not validate nested fields * */
-  public static final FieldConstraint IGNORE_NESTED = new IgnoreNestedConstraint();
+  /** Marks field to validate nested fields * */
+  public static final FieldConstraint VALID = new ValidConstraint();
 
   /** Validates that a number field is positive */
   public static final FieldConstraint POSITIVE = new PositiveConstraint();

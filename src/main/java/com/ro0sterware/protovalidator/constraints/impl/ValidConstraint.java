@@ -9,9 +9,9 @@ import javax.annotation.Nullable;
  * Marker constraint for a message typed field to indicate that the nested message's fields should
  * not be validated.
  */
-public class IgnoreNestedConstraint implements FieldConstraint {
+public class ValidConstraint implements FieldConstraint {
 
-  IgnoreNestedConstraint() {}
+  ValidConstraint() {}
 
   @Override
   public boolean supportsField(Descriptors.FieldDescriptor fieldDescriptor) {

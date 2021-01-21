@@ -70,8 +70,8 @@ public class ProtobufValidator {
 
   private boolean shouldValidateNestedMessage(
       MessageValidator messageValidator, Descriptors.FieldDescriptor field) {
-    // Returns true only if message field is not marked with an ignore nested constraint
-    return !messageValidator.getFieldConstraints(field).contains(FieldConstraints.IGNORE_NESTED);
+    // Returns true only if message field is marked with a valid constraint
+    return messageValidator.getFieldConstraints(field).contains(FieldConstraints.VALID);
   }
 
   public static class Builder {
