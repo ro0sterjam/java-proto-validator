@@ -1,0 +1,74 @@
+plugins {
+    id 'java'
+    id "com.diffplug.spotless" version "5.9.0"
+    id "com.google.protobuf" version "0.8.14"
+}
+
+group 'com.ro0sterware'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.14.0'
+    implementation group: 'io.grpc', name: 'grpc-all', version: '1.35.0'
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    implementation group: 'org.springframework', name: 'spring-expression', version: '5.3.3'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.18.1'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.7.0'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+    test {
+        java {
+            srcDirs 'build/generated/source/proto/test/grpc'
+            srcDirs 'build/generated/source/proto/test/java'
+        }
+    }
+}
+
+spotless {
+    java {
+        target project.fileTree(project.rootDir) {
+            include '**/*.java'
+            exclude '**/generated/**/*.*'
+        }
+        removeUnusedImports()
+        googleJavaFormat('1.7')
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+compileJava.dependsOn 'spotlessApply'
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.14.0"
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.35.0"
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
