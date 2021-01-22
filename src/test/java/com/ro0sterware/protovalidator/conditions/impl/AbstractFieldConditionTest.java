@@ -1,5 +1,6 @@
 package com.ro0sterware.protovalidator.conditions.impl;
 
+import static com.ro0sterware.protovalidator.conditions.impl.ApplyConditions.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -72,9 +73,8 @@ abstract class AbstractFieldConditionTest {
   }
 
   private Message createMessageWithConditionalFieldValue(String field, Object value) {
-    String protoFieldName = ProtoFieldUtils.toLowerSnakeCase(field);
     Descriptors.FieldDescriptor fieldDescriptor =
-        getTestMessageBuilder().getDescriptorForType().findFieldByName(protoFieldName);
+        ProtoFieldUtils.getFieldDescriptor(getTestMessageBuilder().getDescriptorForType(), field);
     if (value == null) {
       return getTestMessageBuilder().clearField(fieldDescriptor).build();
     } else if (value instanceof ProtocolMessageEnum) {
@@ -87,11 +87,13 @@ abstract class AbstractFieldConditionTest {
   }
 
   private ProtobufValidator createValidatorForConditionalField(String field) {
+    final String testField = getTestField();
+    final FieldConstraint testFieldConstraint = getTestFieldConstraint();
+    final ApplyCondition applyCondition = getTestFieldCondition(field);
     return ProtobufValidator.createBuilder()
         .registerValidator(
             MessageValidator.createBuilder(getTestMessageBuilder().getDescriptorForType())
-                .addFieldConstraint(
-                    getTestField(), getTestFieldConstraint(), getTestFieldCondition(field))
+                .addFieldConstraint(testField, testFieldConstraint, when(applyCondition))
                 .build())
         .build();
   }

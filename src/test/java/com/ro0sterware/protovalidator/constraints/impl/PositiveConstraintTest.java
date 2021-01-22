@@ -1,6 +1,10 @@
 package com.ro0sterware.protovalidator.constraints.impl;
 
-import com.google.protobuf.*;
+import com.google.protobuf.DoubleValue;
+import com.google.protobuf.FloatValue;
+import com.google.protobuf.Int32Value;
+import com.google.protobuf.Int64Value;
+import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.MessageViolation;
 import com.ro0sterware.protovalidator.TestMessageOuterClass;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;

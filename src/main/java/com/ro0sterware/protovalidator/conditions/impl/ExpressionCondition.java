@@ -29,14 +29,16 @@ public class ExpressionCondition implements ApplyCondition {
 
   @Override
   public boolean applies(Message message) {
-    Boolean result = expression.getValue(message, Boolean.class);
-    if (result == null) {
-      throw new IllegalStateException(
-          String.format(
-              "Expression [%s] could not be evaluated to boolean",
-              expression.getExpressionString()));
+    try {
+      Boolean result = expression.getValue(message, Boolean.class);
+      if (result == null) {
+        throw new IllegalStateException("Did not expect a null Boolean evaluation result");
+      }
+      return result;
+    } catch (RuntimeException e) {
+      throw new ExpressionEvaluationException(
+          expression.getExpressionString(), message.getDescriptorForType().getFullName(), e);
     }
-    return result;
   }
 
   @Override
@@ -49,5 +51,16 @@ public class ExpressionCondition implements ApplyCondition {
     final Map<String, Object> params = new HashMap<>();
     params.put("expression", expression.getExpressionString());
     return Collections.unmodifiableMap(params);
+  }
+
+  public static class ExpressionEvaluationException extends RuntimeException {
+
+    ExpressionEvaluationException(String expression, String messageType, Throwable cause) {
+      super(
+          String.format(
+              "Failed to evaluate expression: '%s' against message with type: %s",
+              expression, messageType),
+          cause);
+    }
   }
 }

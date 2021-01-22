@@ -16,9 +16,7 @@ public abstract class AbstractCollectionConstraint implements FieldConstraint {
   @Override
   public boolean isValid(
       Message message, Descriptors.FieldDescriptor fieldDescriptor, @Nullable Object value) {
-    if (value == null) {
-      return isValid(message, fieldDescriptor, null);
-    } else if (value instanceof Collection<?>) {
+    if (value == null || value instanceof Collection<?>) {
       return isValid(message, fieldDescriptor, (Collection<?>) value);
     } else {
       throw new IllegalStateException("Unexpected value: " + value);

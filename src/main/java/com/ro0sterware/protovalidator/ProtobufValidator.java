@@ -3,7 +3,11 @@ package com.ro0sterware.protovalidator;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.constraints.impl.FieldConstraints;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
@@ -12,7 +16,7 @@ public class ProtobufValidator {
 
   private final Map<Descriptors.Descriptor, MessageValidator> messageValidators;
 
-  public ProtobufValidator(Map<Descriptors.Descriptor, MessageValidator> messageValidators) {
+  private ProtobufValidator(Map<Descriptors.Descriptor, MessageValidator> messageValidators) {
     this.messageValidators = Collections.unmodifiableMap(new HashMap<>(messageValidators));
   }
 

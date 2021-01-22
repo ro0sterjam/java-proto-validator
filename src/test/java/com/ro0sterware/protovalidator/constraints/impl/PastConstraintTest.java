@@ -31,6 +31,7 @@ class PastConstraintTest extends AbstractFieldConstraintTest {
   @Override
   Stream<Arguments> provideValidFieldValues() {
     return Stream.of(
+        Arguments.of("timestampField", null),
         Arguments.of("timestampField", fromInstant(Instant.now().minus(1, ChronoUnit.MINUTES))));
   }
 

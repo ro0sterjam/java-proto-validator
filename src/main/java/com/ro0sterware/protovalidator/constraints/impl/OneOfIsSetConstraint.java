@@ -4,7 +4,11 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.constraints.MessageConstraint;
 import com.ro0sterware.protovalidator.utils.ProtoFieldUtils;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /** Constraint that validates that a oneOf field on a message is set. */
@@ -16,7 +20,7 @@ public class OneOfIsSetConstraint implements MessageConstraint {
 
   OneOfIsSetConstraint(String field) {
     this.field = Objects.requireNonNull(field);
-    this.protoFieldName = ProtoFieldUtils.toLowerSnakeCase(field);
+    this.protoFieldName = ProtoFieldUtils.toProtoName(field);
   }
 
   @Override

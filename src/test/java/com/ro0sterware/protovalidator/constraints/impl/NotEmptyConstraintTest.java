@@ -35,7 +35,10 @@ class NotEmptyConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   Stream<Arguments> provideInvalidFieldValues() {
-    return Stream.of(Arguments.of("repeatedField", Collections.emptyList()));
+    return Stream.of(
+        //        Arguments.of("repeatedField", null), // Can't call hasField for repeated fields so
+        // can't test unset case
+        Arguments.of("repeatedField", Collections.emptyList()));
   }
 
   @Override

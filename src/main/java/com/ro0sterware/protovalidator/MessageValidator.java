@@ -9,10 +9,14 @@ import com.ro0sterware.protovalidator.constraints.FieldConstraint;
 import com.ro0sterware.protovalidator.constraints.MessageConstraint;
 import com.ro0sterware.protovalidator.exceptions.ApplyConditionNotSupportedException;
 import com.ro0sterware.protovalidator.exceptions.FieldConstraintNotSupportedException;
-import com.ro0sterware.protovalidator.exceptions.FieldDoesNotExistException;
 import com.ro0sterware.protovalidator.exceptions.MessageConstraintNotSupportedException;
 import com.ro0sterware.protovalidator.utils.ProtoFieldUtils;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -46,7 +50,7 @@ public class MessageValidator {
    * @param message message to get violations for
    * @return constraint violations for this message
    */
-  public List<MessageViolation> getMessageViolations(@Nullable String path, Message message) {
+  List<MessageViolation> getMessageViolations(@Nullable String path, Message message) {
     assertCorrectMessageType(message);
 
     // Get all message level violations
@@ -61,7 +65,7 @@ public class MessageValidator {
             .flatMap(
                 fieldDescriptor -> {
                   final String field = fieldDescriptor.getJsonName();
-                  final Object value = getValue(message, fieldDescriptor);
+                  final Object value = ProtoFieldUtils.getValue(message, fieldDescriptor);
                   final String fieldPath = path == null ? field : path + "." + field;
                   return fieldConstraints.get(fieldDescriptor).stream()
                       .filter(constraint -> !constraint.isValid(message, fieldDescriptor, value))
@@ -77,7 +81,7 @@ public class MessageValidator {
    * @param fieldDescriptor field descriptor in which to retrieve the field constraints for
    * @return all the field constraints on the given fieldDescriptor
    */
-  public List<FieldConstraint> getFieldConstraints(Descriptors.FieldDescriptor fieldDescriptor) {
+  List<FieldConstraint> getFieldConstraints(Descriptors.FieldDescriptor fieldDescriptor) {
     return fieldConstraints.getOrDefault(fieldDescriptor, Collections.emptyList());
   }
 
@@ -112,18 +116,6 @@ public class MessageValidator {
     return constraint.getDefaultErrorMessage() == null
         ? DEFAULT_ERROR_MESSAGE
         : constraint.getDefaultErrorMessage();
-  }
-
-  @Nullable
-  private Object getValue(Message message, Descriptors.FieldDescriptor fieldDescriptor) {
-    if (fieldDescriptor.getType() == Descriptors.FieldDescriptor.Type.MESSAGE
-        || fieldDescriptor.getType() == Descriptors.FieldDescriptor.Type.ENUM) {
-      // getField for message and enum just returns the default value even if not set, thus we
-      // need
-      // to explicitly check if the field is set
-      return message.hasField(fieldDescriptor) ? message.getField(fieldDescriptor) : null;
-    }
-    return message.getField(fieldDescriptor);
   }
 
   private void assertCorrectMessageType(Message message) {
@@ -173,12 +165,9 @@ public class MessageValidator {
      * @return this
      */
     public Builder addFieldConstraint(String field, FieldConstraint fieldConstraint) {
-      final String protoFieldName = ProtoFieldUtils.toLowerSnakeCase(field);
       final Descriptors.FieldDescriptor fieldDescriptor =
-          messageDescriptor.findFieldByName(protoFieldName);
-      if (fieldDescriptor == null) {
-        throw new FieldDoesNotExistException(messageDescriptor, field);
-      } else if (!fieldConstraint.supportsField(fieldDescriptor)) {
+          ProtoFieldUtils.getFieldDescriptor(messageDescriptor, field);
+      if (!fieldConstraint.supportsField(fieldDescriptor)) {
         throw new FieldConstraintNotSupportedException(fieldConstraint, fieldDescriptor);
       }
       fieldConstraints

@@ -1,31 +1,17 @@
 package com.ro0sterware.protovalidator.utils;
 
+import com.google.protobuf.Descriptors;
+import com.google.protobuf.Message;
+import com.ro0sterware.protovalidator.exceptions.FieldDoesNotExistException;
+import javax.annotation.Nullable;
+
 public class ProtoFieldUtils {
 
   private ProtoFieldUtils() {}
 
-  public static String toLowerCamelCase(String lowerSnakeCase) {
-    // TODO verify input is lower snake case
+  public static String toProtoName(String jsonName) {
     final StringBuilder stringBuilder = new StringBuilder();
-    boolean capitalizeNext = false;
-    for (char c : lowerSnakeCase.toCharArray()) {
-      if (c == '_') {
-        capitalizeNext = true;
-      } else if (capitalizeNext && Character.isLowerCase(c)) {
-        stringBuilder.append(Character.toUpperCase(c));
-        capitalizeNext = false;
-      } else {
-        stringBuilder.append(c);
-        capitalizeNext = false;
-      }
-    }
-    return stringBuilder.toString();
-  }
-
-  public static String toLowerSnakeCase(String lowerCamelCase) {
-    // TODO verify input is lower camel case
-    final StringBuilder stringBuilder = new StringBuilder();
-    for (char c : lowerCamelCase.toCharArray()) {
+    for (char c : jsonName.toCharArray()) {
       if (Character.isUpperCase(c)) {
         stringBuilder.append("_");
         stringBuilder.append(Character.toLowerCase(c));
@@ -34,5 +20,27 @@ public class ProtoFieldUtils {
       }
     }
     return stringBuilder.toString();
+  }
+
+  @Nullable
+  public static Object getValue(Message message, Descriptors.FieldDescriptor fieldDescriptor) {
+    if (fieldDescriptor.getType() == Descriptors.FieldDescriptor.Type.MESSAGE
+        || fieldDescriptor.getType() == Descriptors.FieldDescriptor.Type.ENUM) {
+      // getField for message and enum just returns the default value even if not set, thus we
+      // need to explicitly check if the field is set
+      return message.hasField(fieldDescriptor) ? message.getField(fieldDescriptor) : null;
+    }
+    return message.getField(fieldDescriptor);
+  }
+
+  public static Descriptors.FieldDescriptor getFieldDescriptor(
+      Descriptors.Descriptor messageDescriptor, String field) {
+    final String protoFieldName = toProtoName(field);
+    final Descriptors.FieldDescriptor fieldDescriptor =
+        messageDescriptor.findFieldByName(protoFieldName);
+    if (fieldDescriptor == null) {
+      throw new FieldDoesNotExistException(messageDescriptor, field);
+    }
+    return fieldDescriptor;
   }
 }

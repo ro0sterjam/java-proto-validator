@@ -27,6 +27,8 @@ public class ValidConstraint implements FieldConstraint {
 
   @Override
   public String getViolationErrorCode() {
+    // Should never ne called since this validator is simply a "marker" validator and thus is never
+    // "invalid"
     throw new UnsupportedOperationException();
   }
 }

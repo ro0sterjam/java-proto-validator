@@ -20,13 +20,16 @@ public abstract class AbstractFieldCondition implements ApplyCondition {
 
   @Override
   public boolean supportsMessage(Descriptors.Descriptor messageDescriptor) {
-    final Descriptors.FieldDescriptor fieldDescriptor = getFieldDescriptor(messageDescriptor);
-    return fieldDescriptor != null && supportsField(fieldDescriptor);
+    final Descriptors.FieldDescriptor fieldDescriptor =
+        ProtoFieldUtils.getFieldDescriptor(messageDescriptor, field);
+    return supportsField(fieldDescriptor);
   }
 
   @Override
   public boolean applies(Message message) {
-    return applies(message, getFieldValue(message));
+    final Descriptors.FieldDescriptor fieldDescriptor =
+        ProtoFieldUtils.getFieldDescriptor(message.getDescriptorForType(), field);
+    return applies(message, ProtoFieldUtils.getValue(message, fieldDescriptor));
   }
 
   /**
@@ -52,14 +55,4 @@ public abstract class AbstractFieldCondition implements ApplyCondition {
    * @return whether or not this condition is supported
    */
   protected abstract boolean supportsField(Descriptors.FieldDescriptor fieldDescriptor);
-
-  private Descriptors.FieldDescriptor getFieldDescriptor(Descriptors.Descriptor messageDescriptor) {
-    final String protoFieldName = ProtoFieldUtils.toLowerSnakeCase(field);
-    return messageDescriptor.findFieldByName(protoFieldName);
-  }
-
-  @Nullable
-  private Object getFieldValue(Message message) {
-    return message.getField(getFieldDescriptor(message.getDescriptorForType()));
-  }
 }

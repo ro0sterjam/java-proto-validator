@@ -22,9 +22,7 @@ public abstract class AbstractStringConstraint implements FieldConstraint {
   @Override
   public boolean isValid(
       Message message, Descriptors.FieldDescriptor fieldDescriptor, @Nullable Object value) {
-    if (value == null) {
-      return isValid(message, fieldDescriptor, null);
-    } else if (value instanceof String) {
+    if (value == null || value instanceof String) {
       return isValid(message, fieldDescriptor, (String) value);
     } else if (value instanceof StringValue) {
       return isValid(message, fieldDescriptor, ((StringValue) value).getValue());

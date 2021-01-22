@@ -1,15 +1,21 @@
 package com.ro0sterware.protovalidator.constraints;
 
-import com.google.protobuf.*;
+import com.google.protobuf.Descriptors;
+import com.google.protobuf.DoubleValue;
+import com.google.protobuf.FloatValue;
+import com.google.protobuf.Int32Value;
+import com.google.protobuf.Int64Value;
+import com.google.protobuf.Message;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 /**
  * Abstract constraint for number types and number wrapper message types. Does not support unsigned
  * number representations.
  */
-public abstract class AbstractNumberConstraint extends NullSafeFieldConstraint {
+public abstract class AbstractNumberConstraint implements FieldConstraint {
 
   private static final Set<Descriptors.FieldDescriptor.Type> SUPPORTED_TYPES =
       new HashSet<>(
@@ -38,18 +44,10 @@ public abstract class AbstractNumberConstraint extends NullSafeFieldConstraint {
   }
 
   @Override
-  protected boolean nullSafeIsValid(
-      Message message, Descriptors.FieldDescriptor fieldDescriptor, Object value) {
-    if (value instanceof Double) {
-      return isValid(message, fieldDescriptor, (double) value);
-    } else if (value instanceof Float) {
-      return isValid(message, fieldDescriptor, (float) value);
-    } else if (value instanceof Integer) {
-      return isValid(message, fieldDescriptor, (int) value);
-    } else if (value instanceof Long) {
-      return isValid(message, fieldDescriptor, (long) value);
-    } else if (value instanceof Short) {
-      return isValid(message, fieldDescriptor, (short) value);
+  public boolean isValid(
+      Message message, Descriptors.FieldDescriptor fieldDescriptor, @Nullable Object value) {
+    if (value == null || value instanceof Number) {
+      return isValid(message, fieldDescriptor, (Number) value);
     } else if (value instanceof DoubleValue) {
       return isValid(message, fieldDescriptor, ((DoubleValue) value).getValue());
     } else if (value instanceof FloatValue) {
@@ -63,17 +61,5 @@ public abstract class AbstractNumberConstraint extends NullSafeFieldConstraint {
   }
 
   protected abstract boolean isValid(
-      Message message, Descriptors.FieldDescriptor fieldDescriptor, double value);
-
-  protected abstract boolean isValid(
-      Message message, Descriptors.FieldDescriptor fieldDescriptor, float value);
-
-  protected abstract boolean isValid(
-      Message message, Descriptors.FieldDescriptor fieldDescriptor, long value);
-
-  protected abstract boolean isValid(
-      Message message, Descriptors.FieldDescriptor fieldDescriptor, int value);
-
-  protected abstract boolean isValid(
-      Message message, Descriptors.FieldDescriptor fieldDescriptor, short value);
+      Message message, Descriptors.FieldDescriptor fieldDescriptor, @Nullable Number value);
 }

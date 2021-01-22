@@ -65,9 +65,8 @@ abstract class AbstractFieldConstraintTest {
   }
 
   private Message createMessageWithFieldValue(String field, Object value) {
-    String protoFieldName = ProtoFieldUtils.toLowerSnakeCase(field);
     Descriptors.FieldDescriptor fieldDescriptor =
-        getTestMessageBuilder().getDescriptorForType().findFieldByName(protoFieldName);
+        ProtoFieldUtils.getFieldDescriptor(getTestMessageBuilder().getDescriptorForType(), field);
     if (value == null) {
       return getTestMessageBuilder().clearField(fieldDescriptor).build();
     } else {
