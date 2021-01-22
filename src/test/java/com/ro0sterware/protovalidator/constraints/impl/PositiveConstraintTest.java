@@ -39,7 +39,19 @@ class PositiveConstraintTest extends AbstractFieldConstraintTest {
       "doubleWrapperField",
       "floatWrapperField",
       "int64WrapperField",
-      "int32WrapperField"
+      "int32WrapperField",
+      "repeatedDoubleField",
+      "repeatedFloatField",
+      "repeatedInt32Field",
+      "repeatedInt64Field",
+      "repeatedSint32Field",
+      "repeatedSint64Field",
+      "repeatedSfixed32Field",
+      "repeatedSfixed64Field",
+      "repeatedDoubleWrapperField",
+      "repeatedFloatWrapperField",
+      "repeatedInt64WrapperField",
+      "repeatedInt32WrapperField"
     };
   }
 
@@ -62,7 +74,31 @@ class PositiveConstraintTest extends AbstractFieldConstraintTest {
         Arguments.of("int64WrapperField", Int64Value.of(1L)),
         Arguments.of("int64WrapperField", null),
         Arguments.of("int32WrapperField", Int32Value.of(1)),
-        Arguments.of("int32WrapperField", null));
+        Arguments.of("int32WrapperField", null),
+        Arguments.of("repeatedDoubleField", Collections.singletonList(0.1)),
+        Arguments.of("repeatedFloatField", Collections.singletonList(0.1f)),
+        Arguments.of("repeatedInt32Field", Collections.singletonList(1)),
+        Arguments.of("repeatedInt64Field", Collections.singletonList(1L)),
+        Arguments.of("repeatedSint32Field", Collections.singletonList(1)),
+        Arguments.of("repeatedSint64Field", Collections.singletonList(1L)),
+        Arguments.of("repeatedSfixed32Field", Collections.singletonList(1)),
+        Arguments.of("repeatedSfixed64Field", Collections.singletonList(1L)),
+        Arguments.of("repeatedDoubleWrapperField", Collections.singletonList(DoubleValue.of(0.1))),
+        Arguments.of("repeatedFloatWrapperField", Collections.singletonList(FloatValue.of(0.1f))),
+        Arguments.of("repeatedInt64WrapperField", Collections.singletonList(Int64Value.of(1L))),
+        Arguments.of("repeatedInt32WrapperField", Collections.singletonList(Int32Value.of(1))),
+        Arguments.of("repeatedDoubleField", Collections.emptyList()),
+        Arguments.of("repeatedFloatField", Collections.emptyList()),
+        Arguments.of("repeatedInt32Field", Collections.emptyList()),
+        Arguments.of("repeatedInt64Field", Collections.emptyList()),
+        Arguments.of("repeatedSint32Field", Collections.emptyList()),
+        Arguments.of("repeatedSint64Field", Collections.emptyList()),
+        Arguments.of("repeatedSfixed32Field", Collections.emptyList()),
+        Arguments.of("repeatedSfixed64Field", Collections.emptyList()),
+        Arguments.of("repeatedDoubleWrapperField", Collections.emptyList()),
+        Arguments.of("repeatedFloatWrapperField", Collections.emptyList()),
+        Arguments.of("repeatedInt64WrapperField", Collections.emptyList()),
+        Arguments.of("repeatedInt32WrapperField", Collections.emptyList()));
   }
 
   @Override
@@ -80,7 +116,19 @@ class PositiveConstraintTest extends AbstractFieldConstraintTest {
         Arguments.of("doubleWrapperField", DoubleValue.of(0.0)),
         Arguments.of("floatWrapperField", FloatValue.of(0.0f)),
         Arguments.of("int64WrapperField", Int64Value.of(0L)),
-        Arguments.of("int32WrapperField", Int32Value.of(0)));
+        Arguments.of("int32WrapperField", Int32Value.of(0)),
+        Arguments.of("repeatedDoubleField", Collections.singletonList(0.0)),
+        Arguments.of("repeatedFloatField", Collections.singletonList(0.0f)),
+        Arguments.of("repeatedInt32Field", Collections.singletonList(0)),
+        Arguments.of("repeatedInt64Field", Collections.singletonList(0L)),
+        Arguments.of("repeatedSint32Field", Collections.singletonList(0)),
+        Arguments.of("repeatedSint64Field", Collections.singletonList(0L)),
+        Arguments.of("repeatedSfixed32Field", Collections.singletonList(0)),
+        Arguments.of("repeatedSfixed64Field", Collections.singletonList(0L)),
+        Arguments.of("repeatedDoubleWrapperField", Collections.singletonList(DoubleValue.of(0.0))),
+        Arguments.of("repeatedFloatWrapperField", Collections.singletonList(FloatValue.of(0.0f))),
+        Arguments.of("repeatedInt64WrapperField", Collections.singletonList(Int64Value.of(0L))),
+        Arguments.of("repeatedInt32WrapperField", Collections.singletonList(Int32Value.of(0))));
   }
 
   @Override

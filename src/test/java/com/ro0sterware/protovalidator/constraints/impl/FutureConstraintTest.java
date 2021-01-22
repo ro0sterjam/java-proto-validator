@@ -25,20 +25,27 @@ class FutureConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   String[] getSupportedFields() {
-    return new String[] {"timestampField"};
+    return new String[] {"timestampField", "repeatedTimestampField"};
   }
 
   @Override
   Stream<Arguments> provideValidFieldValues() {
     return Stream.of(
         Arguments.of("timestampField", null),
-        Arguments.of("timestampField", fromInstant(Instant.now().plus(1, ChronoUnit.MINUTES))));
+        Arguments.of("timestampField", fromInstant(Instant.now().plus(1, ChronoUnit.MINUTES))),
+        Arguments.of(
+            "repeatedTimestampField",
+            Collections.singletonList(fromInstant(Instant.now().plus(1, ChronoUnit.MINUTES)))),
+        Arguments.of("repeatedTimestampField", Collections.emptyList()));
   }
 
   @Override
   Stream<Arguments> provideInvalidFieldValues() {
     return Stream.of(
-        Arguments.of("timestampField", fromInstant(Instant.now().minus(1, ChronoUnit.MINUTES))));
+        Arguments.of("timestampField", fromInstant(Instant.now().minus(1, ChronoUnit.MINUTES))),
+        Arguments.of(
+            "repeatedTimestampField",
+            Collections.singletonList(fromInstant(Instant.now().minus(1, ChronoUnit.MINUTES)))));
   }
 
   @Override

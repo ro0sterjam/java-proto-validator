@@ -23,7 +23,13 @@ class NotBlankConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   String[] getSupportedFields() {
-    return new String[] {"stringField", "firstOneofField", "stringWrapperField"};
+    return new String[] {
+      "stringField",
+      "firstOneofField",
+      "stringWrapperField",
+      "repeatedStringField",
+      "repeatedStringWrapperField"
+    };
   }
 
   @Override
@@ -31,7 +37,12 @@ class NotBlankConstraintTest extends AbstractFieldConstraintTest {
     return Stream.of(
         Arguments.of("stringField", "sdfdsf"),
         Arguments.of("firstOneofField", StringValue.of("sdfsdf")),
-        Arguments.of("stringWrapperField", StringValue.of("xcvxcv")));
+        Arguments.of("stringWrapperField", StringValue.of("xcvxcv")),
+        Arguments.of("repeatedStringField", Collections.singletonList("sdfdsf")),
+        Arguments.of(
+            "repeatedStringWrapperField", Collections.singletonList(StringValue.of("xcvxcv"))),
+        Arguments.of("repeatedStringField", Collections.emptyList()),
+        Arguments.of("repeatedStringWrapperField", Collections.emptyList()));
   }
 
   @Override
@@ -44,7 +55,13 @@ class NotBlankConstraintTest extends AbstractFieldConstraintTest {
         Arguments.of("firstOneofField", StringValue.of("   ")),
         Arguments.of("stringWrapperField", null),
         Arguments.of("stringWrapperField", StringValue.of("")),
-        Arguments.of("stringWrapperField", StringValue.of("  ")));
+        Arguments.of("stringWrapperField", StringValue.of("  ")),
+        Arguments.of("repeatedStringField", Collections.singletonList("")),
+        Arguments.of("repeatedStringField", Collections.singletonList("   ")),
+        Arguments.of("repeatedStringWrapperField", Collections.emptyList()),
+        Arguments.of("repeatedStringWrapperField", Collections.singletonList(StringValue.of(""))),
+        Arguments.of(
+            "repeatedStringWrapperField", Collections.singletonList(StringValue.of("  "))));
   }
 
   @Override

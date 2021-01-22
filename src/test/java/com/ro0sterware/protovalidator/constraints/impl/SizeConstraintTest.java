@@ -25,21 +25,54 @@ class SizeConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   String[] getSupportedFields() {
-    return new String[] {"repeatedField"};
+    return new String[] {
+      "repeatedStringField",
+      "repeatedTestNestedMessageField",
+      "repeatedDoubleField",
+      "repeatedFloatField",
+      "repeatedInt32Field",
+      "repeatedInt64Field",
+      "repeatedUint32Field",
+      "repeatedUint64Field",
+      "repeatedSint32Field",
+      "repeatedSint64Field",
+      "repeatedFixed32Field",
+      "repeatedFixed64Field",
+      "repeatedSfixed32Field",
+      "repeatedSfixed64Field",
+      "repeatedBoolField",
+      "repeatedBytesField",
+      "repeatedTestEnumField",
+      "repeatedDoubleWrapperField",
+      "repeatedFloatWrapperField",
+      "repeatedInt64WrapperField",
+      "repeatedUint64WrapperField",
+      "repeatedInt32WrapperField",
+      "repeatedUint32WrapperField",
+      "repeatedBoolWrapperField",
+      "repeatedStringWrapperField",
+      "repeatedBytesWrapperField",
+      "repeatedTimestampField",
+      "repeatedDurationField"
+    };
   }
 
   @Override
   Stream<Arguments> provideValidFieldValues() {
     return Stream.of(
-        Arguments.of("repeatedField", Arrays.asList("some", "strings")),
-        Arguments.of("repeatedField", Arrays.asList("some", "more", "strings")));
+        Arguments.of("repeatedStringField", Arrays.asList("some", "strings")),
+        Arguments.of("repeatedStringField", Arrays.asList("some", "more", "strings")));
   }
 
   @Override
   Stream<Arguments> provideInvalidFieldValues() {
     return Stream.of(
-        Arguments.of("repeatedField", Collections.singletonList("lonely")),
-        Arguments.of("repeatedField", Arrays.asList("but", "i", "am", "not")));
+        Arguments.of("repeatedStringField", Collections.singletonList("lonely")),
+        Arguments.of("repeatedStringField", Arrays.asList("but", "i", "am", "not")),
+        Arguments.of(
+            "repeatedTestNestedMessageField",
+            Collections.singletonList(
+                TestMessageOuterClass.TestNestedMessage.getDefaultInstance())));
   }
 
   @Override

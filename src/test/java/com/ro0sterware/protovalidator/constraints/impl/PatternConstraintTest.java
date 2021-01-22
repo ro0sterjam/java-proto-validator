@@ -5,6 +5,7 @@ import com.google.protobuf.StringValue;
 import com.ro0sterware.protovalidator.MessageViolation;
 import com.ro0sterware.protovalidator.TestMessageOuterClass;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -24,7 +25,13 @@ class PatternConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   String[] getSupportedFields() {
-    return new String[] {"stringField", "firstOneofField", "stringWrapperField"};
+    return new String[] {
+      "stringField",
+      "firstOneofField",
+      "stringWrapperField",
+      "repeatedStringField",
+      "repeatedStringWrapperField"
+    };
   }
 
   @Override
@@ -34,7 +41,13 @@ class PatternConstraintTest extends AbstractFieldConstraintTest {
         Arguments.of("firstOneofField", null),
         Arguments.of("firstOneofField", StringValue.of("abksjfsdfkr")),
         Arguments.of("stringWrapperField", null),
-        Arguments.of("stringWrapperField", StringValue.of("abksjfsdfkr")));
+        Arguments.of("stringWrapperField", StringValue.of("abksjfsdfkr")),
+        Arguments.of("repeatedStringField", Collections.singletonList("abksjfsdfkr")),
+        Arguments.of("repeatedStringField", Collections.emptyList()),
+        Arguments.of("repeatedStringWrapperField", Collections.emptyList()),
+        Arguments.of(
+            "repeatedStringWrapperField",
+            Collections.singletonList(StringValue.of("abksjfsdfkr"))));
   }
 
   @Override
@@ -42,7 +55,10 @@ class PatternConstraintTest extends AbstractFieldConstraintTest {
     return Stream.of(
         Arguments.of("stringField", "fsdfdsf"),
         Arguments.of("firstOneofField", StringValue.of("werew")),
-        Arguments.of("stringWrapperField", StringValue.of("sdfdf")));
+        Arguments.of("stringWrapperField", StringValue.of("sdfdf")),
+        Arguments.of("repeatedStringField", Collections.singletonList("fsdfdsf")),
+        Arguments.of(
+            "repeatedStringWrapperField", Collections.singletonList(StringValue.of("sdfdf"))));
   }
 
   @Override

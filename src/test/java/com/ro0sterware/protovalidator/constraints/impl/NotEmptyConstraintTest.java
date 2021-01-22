@@ -23,22 +23,50 @@ class NotEmptyConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   String[] getSupportedFields() {
-    return new String[] {"repeatedField"};
+    return new String[] {
+      "repeatedStringField",
+      "repeatedTestNestedMessageField",
+      "repeatedDoubleField",
+      "repeatedFloatField",
+      "repeatedInt32Field",
+      "repeatedInt64Field",
+      "repeatedUint32Field",
+      "repeatedUint64Field",
+      "repeatedSint32Field",
+      "repeatedSint64Field",
+      "repeatedFixed32Field",
+      "repeatedFixed64Field",
+      "repeatedSfixed32Field",
+      "repeatedSfixed64Field",
+      "repeatedBoolField",
+      "repeatedBytesField",
+      "repeatedTestEnumField",
+      "repeatedDoubleWrapperField",
+      "repeatedFloatWrapperField",
+      "repeatedInt64WrapperField",
+      "repeatedUint64WrapperField",
+      "repeatedInt32WrapperField",
+      "repeatedUint32WrapperField",
+      "repeatedBoolWrapperField",
+      "repeatedStringWrapperField",
+      "repeatedBytesWrapperField",
+      "repeatedTimestampField",
+      "repeatedDurationField"
+    };
   }
 
   @Override
   Stream<Arguments> provideValidFieldValues() {
     return Stream.of(
-        Arguments.of("repeatedField", Collections.singletonList("word")),
-        Arguments.of("repeatedField", Arrays.asList("some", "strings")));
+        Arguments.of("repeatedStringField", Collections.singletonList("word")),
+        Arguments.of("repeatedStringField", Arrays.asList("some", "strings")));
   }
 
   @Override
   Stream<Arguments> provideInvalidFieldValues() {
     return Stream.of(
-        //        Arguments.of("repeatedField", null), // Can't call hasField for repeated fields so
-        // can't test unset case
-        Arguments.of("repeatedField", Collections.emptyList()));
+        Arguments.of("repeatedStringField", Collections.emptyList()),
+        Arguments.of("repeatedTestNestedMessageField", Collections.emptyList()));
   }
 
   @Override

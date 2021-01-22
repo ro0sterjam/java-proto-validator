@@ -13,10 +13,9 @@ public abstract class AbstractStringConstraint implements FieldConstraint {
 
   @Override
   public boolean supportsField(Descriptors.FieldDescriptor fieldDescriptor) {
-    return (fieldDescriptor.getType() == Descriptors.FieldDescriptor.Type.STRING
-            || (fieldDescriptor.getType().equals(Descriptors.FieldDescriptor.Type.MESSAGE)
-                && fieldDescriptor.getMessageType().equals(StringValue.getDescriptor())))
-        && !fieldDescriptor.isRepeated();
+    return fieldDescriptor.getType() == Descriptors.FieldDescriptor.Type.STRING
+        || (fieldDescriptor.getType().equals(Descriptors.FieldDescriptor.Type.MESSAGE)
+            && fieldDescriptor.getMessageType().equals(StringValue.getDescriptor()));
   }
 
   @Override

@@ -3,6 +3,7 @@ package com.ro0sterware.protovalidator;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.conditions.ApplyCondition;
+import com.ro0sterware.protovalidator.constraints.AbstractCollectionConstraint;
 import com.ro0sterware.protovalidator.constraints.ConditionalFieldConstraint;
 import com.ro0sterware.protovalidator.constraints.Constraint;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;
@@ -17,7 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
@@ -67,12 +70,58 @@ public class MessageValidator {
                   final String field = fieldDescriptor.getJsonName();
                   final Object value = ProtoFieldUtils.getValue(message, fieldDescriptor);
                   final String fieldPath = path == null ? field : path + "." + field;
-                  return fieldConstraints.get(fieldDescriptor).stream()
-                      .filter(constraint -> !constraint.isValid(message, fieldDescriptor, value))
-                      .map(constraint -> createMessageViolation(constraint, fieldPath, value));
+                  return getFieldViolations(
+                      message,
+                      fieldDescriptor,
+                      value,
+                      fieldConstraints.get(fieldDescriptor),
+                      fieldPath);
                 });
 
     return Stream.concat(messageViolations, fieldViolations).collect(Collectors.toList());
+  }
+
+  private Stream<MessageViolation> getFieldViolations(
+      Message message,
+      Descriptors.FieldDescriptor fieldDescriptor,
+      @Nullable Object value,
+      List<FieldConstraint> fieldConstraints,
+      String fieldPath) {
+    if (fieldDescriptor.isRepeated()) {
+      if (!(value instanceof List)) {
+        throw new IllegalStateException("Field cannot be repeated and have a null value");
+      }
+
+      final Stream<MessageViolation> fieldViolations =
+          fieldConstraints.stream()
+              .filter(AbstractCollectionConstraint.class::isInstance)
+              .filter(constraint -> !constraint.isValid(message, fieldDescriptor, value))
+              .map(constraint -> createMessageViolation(constraint, fieldPath, value));
+
+      final List<?> repeatedValues = (List<?>) value;
+      final Stream<MessageViolation> elementViolations =
+          IntStream.range(0, repeatedValues.size())
+              .mapToObj(
+                  i -> {
+                    final String elementPath = fieldPath + "[" + i + "]";
+                    final Object elementValue = repeatedValues.get(i);
+                    return fieldConstraints.stream()
+                        .filter(constraint -> !(constraint instanceof AbstractCollectionConstraint))
+                        .filter(
+                            constraint ->
+                                !constraint.isValid(message, fieldDescriptor, elementValue))
+                        .map(
+                            constraint ->
+                                createMessageViolation(constraint, elementPath, elementValue));
+                  })
+              .flatMap(Function.identity());
+
+      return Stream.concat(fieldViolations, elementViolations);
+    } else {
+      return fieldConstraints.stream()
+          .filter(constraint -> !constraint.isValid(message, fieldDescriptor, value))
+          .map(constraint -> createMessageViolation(constraint, fieldPath, value));
+    }
   }
 
   /**

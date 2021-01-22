@@ -23,7 +23,9 @@ class AssertFalseConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   String[] getSupportedFields() {
-    return new String[] {"boolField", "boolWrapperField"};
+    return new String[] {
+      "boolField", "boolWrapperField", "repeatedBoolField", "repeatedBoolWrapperField"
+    };
   }
 
   @Override
@@ -31,13 +33,20 @@ class AssertFalseConstraintTest extends AbstractFieldConstraintTest {
     return Stream.of(
         Arguments.of("boolField", false),
         Arguments.of("boolWrapperField", BoolValue.of(false)),
-        Arguments.of("boolWrapperField", null));
+        Arguments.of("boolWrapperField", null),
+        Arguments.of("repeatedBoolField", Collections.singletonList(false)),
+        Arguments.of("repeatedBoolWrapperField", Collections.singletonList(BoolValue.of(false))),
+        Arguments.of("repeatedBoolField", Collections.emptyList()),
+        Arguments.of("repeatedBoolWrapperField", Collections.emptyList()));
   }
 
   @Override
   Stream<Arguments> provideInvalidFieldValues() {
     return Stream.of(
-        Arguments.of("boolField", true), Arguments.of("boolWrapperField", BoolValue.of(true)));
+        Arguments.of("boolField", true),
+        Arguments.of("boolWrapperField", BoolValue.of(true)),
+        Arguments.of("repeatedBoolField", Collections.singletonList(true)),
+        Arguments.of("repeatedBoolWrapperField", Collections.singletonList(BoolValue.of(true))));
   }
 
   @Override

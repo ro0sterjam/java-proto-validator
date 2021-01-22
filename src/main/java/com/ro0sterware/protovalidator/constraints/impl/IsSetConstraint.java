@@ -20,7 +20,7 @@ public class IsSetConstraint implements FieldConstraint {
 
   @Override
   public boolean supportsField(Descriptors.FieldDescriptor fieldDescriptor) {
-    return SUPPORTED_TYPES.contains(fieldDescriptor.getType());
+    return !fieldDescriptor.isRepeated() && SUPPORTED_TYPES.contains(fieldDescriptor.getType());
   }
 
   @Override

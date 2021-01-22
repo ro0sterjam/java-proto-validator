@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.annotation.Nullable;
 
 /** Validator for protobuf messages. */
@@ -53,13 +54,7 @@ public class ProtobufValidator {
         fields.keySet().stream()
             .filter(field -> field.getType() == Descriptors.FieldDescriptor.Type.MESSAGE)
             .filter(field -> shouldValidateNestedMessage(messageValidator, field))
-            .map(
-                field -> {
-                  final Message nestedMessage = (Message) fields.get(field);
-                  final String fieldName = field.getJsonName();
-                  final String subPath = path == null ? fieldName : path + "." + fieldName;
-                  return validate(nestedMessage, subPath);
-                })
+            .map(field -> getNestedViolations(field, fields.get(field), path))
             .flatMap(List::stream)
             .collect(Collectors.toList());
 
@@ -68,14 +63,41 @@ public class ProtobufValidator {
     return Collections.unmodifiableList(allViolations);
   }
 
-  public static Builder createBuilder() {
-    return new Builder();
-  }
-
   private boolean shouldValidateNestedMessage(
       MessageValidator messageValidator, Descriptors.FieldDescriptor field) {
     // Returns true only if message field is marked with a valid constraint
     return messageValidator.getFieldConstraints(field).contains(FieldConstraints.VALID);
+  }
+
+  private List<MessageViolation> getNestedViolations(
+      Descriptors.FieldDescriptor field, Object fieldValue, @Nullable String path) {
+    if (fieldValue instanceof Message) {
+      final Message nestedMessage = (Message) fieldValue;
+      final String fieldName = field.getJsonName();
+      final String subPath = path == null ? fieldName : path + "." + fieldName;
+      return validate(nestedMessage, subPath);
+    } else if (fieldValue instanceof List) {
+      final List<?> nestedMessages = (List<?>) fieldValue;
+      final String fieldName = field.getJsonName();
+      return IntStream.range(0, nestedMessages.size())
+          .mapToObj(
+              i -> {
+                final String subPath =
+                    (path == null ? fieldName : path + "." + fieldName) + "[" + i + "]";
+                final Message nestedMessage = (Message) nestedMessages.get(i);
+                return validate(nestedMessage, subPath);
+              })
+          .flatMap(List::stream)
+          .collect(Collectors.toList());
+    } else {
+      throw new IllegalStateException(
+          "Expected only message or list of messages in getNestedViolation but received type: "
+              + fieldValue.getClass());
+    }
+  }
+
+  public static Builder createBuilder() {
+    return new Builder();
   }
 
   public static class Builder {

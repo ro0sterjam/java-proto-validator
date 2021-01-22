@@ -5,6 +5,7 @@ import com.google.protobuf.StringValue;
 import com.ro0sterware.protovalidator.MessageViolation;
 import com.ro0sterware.protovalidator.TestMessageOuterClass;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -24,7 +25,13 @@ class LengthConstraintTest extends AbstractFieldConstraintTest {
 
   @Override
   String[] getSupportedFields() {
-    return new String[] {"stringField", "firstOneofField", "stringWrapperField"};
+    return new String[] {
+      "stringField",
+      "firstOneofField",
+      "stringWrapperField",
+      "repeatedStringField",
+      "repeatedStringWrapperField"
+    };
   }
 
   @Override
@@ -43,7 +50,22 @@ class LengthConstraintTest extends AbstractFieldConstraintTest {
         Arguments.of("stringWrapperField", StringValue.of("1234567890")),
         Arguments.of("stringWrapperField", StringValue.of("12345678901")),
         Arguments.of("stringWrapperField", StringValue.of("1234567890123456789")),
-        Arguments.of("stringWrapperField", StringValue.of("12345678901234567890")));
+        Arguments.of("stringWrapperField", StringValue.of("12345678901234567890")),
+        Arguments.of("repeatedStringField", Collections.singletonList("1234567890")),
+        Arguments.of("repeatedStringField", Collections.singletonList("12345678901")),
+        Arguments.of("repeatedStringField", Collections.singletonList("1234567890123456789")),
+        Arguments.of("repeatedStringField", Collections.singletonList("12345678901234567890")),
+        Arguments.of("repeatedStringWrapperField", Collections.emptyList()),
+        Arguments.of(
+            "repeatedStringWrapperField", Collections.singletonList(StringValue.of("1234567890"))),
+        Arguments.of(
+            "repeatedStringWrapperField", Collections.singletonList(StringValue.of("12345678901"))),
+        Arguments.of(
+            "repeatedStringWrapperField",
+            Collections.singletonList(StringValue.of("1234567890123456789"))),
+        Arguments.of(
+            "repeatedStringWrapperField",
+            Collections.singletonList(StringValue.of("12345678901234567890"))));
   }
 
   @Override
@@ -54,7 +76,14 @@ class LengthConstraintTest extends AbstractFieldConstraintTest {
         Arguments.of("firstOneofField", StringValue.of("123456789")),
         Arguments.of("firstOneofField", StringValue.of("123456789012345678901")),
         Arguments.of("stringWrapperField", StringValue.of("123456789")),
-        Arguments.of("stringWrapperField", StringValue.of("123456789012345678901")));
+        Arguments.of("stringWrapperField", StringValue.of("123456789012345678901")),
+        Arguments.of("repeatedStringField", Collections.singletonList("123456789")),
+        Arguments.of("repeatedStringField", Collections.singletonList("123456789012345678901")),
+        Arguments.of(
+            "repeatedStringWrapperField", Collections.singletonList(StringValue.of("123456789"))),
+        Arguments.of(
+            "repeatedStringWrapperField",
+            Collections.singletonList(StringValue.of("123456789012345678901"))));
   }
 
   @Override

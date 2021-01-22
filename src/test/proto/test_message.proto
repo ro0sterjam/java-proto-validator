@@ -24,22 +24,49 @@ message TestMessage {
     bytes bytes_field = 15;
     TestEnum test_enum_field = 16;
     TestNestedMessage test_nested_message_field = 17;
-    repeated string repeated_field = 18;
+    google.protobuf.DoubleValue double_wrapper_field = 18;
+    google.protobuf.FloatValue float_wrapper_field = 19;
+    google.protobuf.Int64Value int64_wrapper_field = 20;
+    google.protobuf.UInt64Value uint64_wrapper_field = 21;
+    google.protobuf.Int32Value int32_wrapper_field = 22;
+    google.protobuf.UInt32Value uint32_wrapper_field = 23;
+    google.protobuf.BoolValue bool_wrapper_field = 24;
+    google.protobuf.StringValue string_wrapper_field = 25;
+    google.protobuf.BytesValue bytes_wrapper_field = 26;
+    google.protobuf.Timestamp timestamp_field = 27;
+    google.protobuf.Duration duration_field = 28;
     oneof oneof_field {
-      google.protobuf.StringValue first_oneof_field = 19;
-      int32 second_oneof_field = 20;
+      google.protobuf.StringValue first_oneof_field = 29;
+      int32 second_oneof_field = 30;
     }
-    google.protobuf.DoubleValue double_wrapper_field = 21;
-    google.protobuf.FloatValue float_wrapper_field = 22;
-    google.protobuf.Int64Value int64_wrapper_field = 23;
-    google.protobuf.UInt64Value uint64_wrapper_field = 24;
-    google.protobuf.Int32Value int32_wrapper_field = 25;
-    google.protobuf.UInt32Value uint32_wrapper_field = 26;
-    google.protobuf.BoolValue bool_wrapper_field = 27;
-    google.protobuf.StringValue string_wrapper_field = 28;
-    google.protobuf.BytesValue bytes_wrapper_field = 29;
-    google.protobuf.Timestamp timestamp_field = 30;
-    google.protobuf.Duration duration_field = 31;
+    repeated double repeated_double_field = 31;
+    repeated float repeated_float_field = 32;
+    repeated int32 repeated_int32_field = 33;
+    repeated int64 repeated_int64_field = 34;
+    repeated uint32 repeated_uint32_field = 35;
+    repeated uint64 repeated_uint64_field = 36;
+    repeated sint32 repeated_sint32_field = 37;
+    repeated sint64 repeated_sint64_field = 38;
+    repeated fixed32 repeated_fixed32_field = 39;
+    repeated fixed64 repeated_fixed64_field = 40;
+    repeated sfixed32 repeated_sfixed32_field = 41;
+    repeated sfixed64 repeated_sfixed64_field = 42;
+    repeated bool repeated_bool_field = 43;
+    repeated string repeated_string_field = 44;
+    repeated bytes repeated_bytes_field = 45;
+    repeated TestEnum repeated_test_enum_field = 46;
+    repeated TestNestedMessage repeated_test_nested_message_field = 47;
+    repeated google.protobuf.DoubleValue repeated_double_wrapper_field = 48;
+    repeated google.protobuf.FloatValue repeated_float_wrapper_field = 49;
+    repeated google.protobuf.Int64Value repeated_int64_wrapper_field = 50;
+    repeated google.protobuf.UInt64Value repeated_uint64_wrapper_field = 51;
+    repeated google.protobuf.Int32Value repeated_int32_wrapper_field = 52;
+    repeated google.protobuf.UInt32Value repeated_uint32_wrapper_field = 53;
+    repeated google.protobuf.BoolValue repeated_bool_wrapper_field = 54;
+    repeated google.protobuf.StringValue repeated_string_wrapper_field = 55;
+    repeated google.protobuf.BytesValue repeated_bytes_wrapper_field = 56;
+    repeated google.protobuf.Timestamp repeated_timestamp_field = 57;
+    repeated google.protobuf.Duration repeated_duration_field = 58;
 }
 
 enum TestEnum {

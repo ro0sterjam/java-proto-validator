@@ -8,12 +8,15 @@ import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.MessageValidator;
 import com.ro0sterware.protovalidator.MessageViolation;
 import com.ro0sterware.protovalidator.ProtobufValidator;
+import com.ro0sterware.protovalidator.constraints.AbstractCollectionConstraint;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;
 import com.ro0sterware.protovalidator.exceptions.FieldConstraintNotSupportedException;
 import com.ro0sterware.protovalidator.utils.ProtoFieldUtils;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -61,7 +64,24 @@ abstract class AbstractFieldConstraintTest {
   void testValidate_forInvalidMessage_returnsViolation(String field, Object value) {
     ProtobufValidator validator = createValidatorForField(field);
     Message message = createMessageWithFieldValue(field, value);
-    assertThat(validator.validate(message)).containsOnly(getExpectedMessageViolation(field, value));
+    assertThat(validator.validate(message))
+        .containsOnly(getExpectedMessageViolations(field, value));
+  }
+
+  private MessageViolation[] getExpectedMessageViolations(String field, Object value) {
+    if (value instanceof List
+        && !(getTestFieldConstraint() instanceof AbstractCollectionConstraint)) {
+      List<?> elementValues = (List) value;
+      return IntStream.range(0, elementValues.size())
+          .mapToObj(
+              i -> {
+                String elementPath = field + "[" + i + "]";
+                return getExpectedMessageViolation(elementPath, elementValues.get(i));
+              })
+          .toArray(MessageViolation[]::new);
+    } else {
+      return new MessageViolation[] {getExpectedMessageViolation(field, value)};
+    }
   }
 
   private Message createMessageWithFieldValue(String field, Object value) {
