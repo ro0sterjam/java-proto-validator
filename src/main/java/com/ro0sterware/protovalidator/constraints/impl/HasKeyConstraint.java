@@ -6,6 +6,7 @@ import com.ro0sterware.protovalidator.constraints.AbstractMapConstraint;
 import java.util.Collections;
 import java.util.Map;
 
+/** Constraint that validates that a map type field has a given key. */
 public class HasKeyConstraint extends AbstractMapConstraint {
 
   private final Object key;
@@ -16,8 +17,8 @@ public class HasKeyConstraint extends AbstractMapConstraint {
 
   @Override
   protected boolean isValid(
-      Message message, Descriptors.FieldDescriptor fieldDescriptor, Map<?, ?> map) {
-    return map.containsKey(key);
+      Message message, Descriptors.FieldDescriptor fieldDescriptor, Map<?, ?> value) {
+    return value.containsKey(key);
   }
 
   @Override

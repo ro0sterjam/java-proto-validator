@@ -2,19 +2,18 @@ package com.ro0sterware.protovalidator.constraints.impl;
 
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
-import com.ro0sterware.protovalidator.constraints.AbstractCollectionConstraint;
-import java.util.Collection;
-import javax.annotation.Nullable;
+import com.ro0sterware.protovalidator.constraints.AbstractRepeatedConstraint;
+import java.util.List;
 
-/** Constraint that validates that a repeated or map typed field is neither null nor empty. */
-public class NotEmptyConstraint extends AbstractCollectionConstraint {
+/** Constraint that validates that a repeated field is not empty. */
+public class NotEmptyConstraint extends AbstractRepeatedConstraint {
 
   NotEmptyConstraint() {}
 
   @Override
   protected boolean isValid(
-      Message message, Descriptors.FieldDescriptor fieldDescriptor, @Nullable Collection<?> value) {
-    return value != null && !value.isEmpty();
+      Message message, Descriptors.FieldDescriptor fieldDescriptor, List<?> value) {
+    return !value.isEmpty();
   }
 
   @Override

@@ -25,5 +25,5 @@ public abstract class AbstractMapConstraint implements FieldConstraint {
   }
 
   protected abstract boolean isValid(
-      Message message, Descriptors.FieldDescriptor fieldDescriptor, Map<?, ?> map);
+      Message message, Descriptors.FieldDescriptor fieldDescriptor, Map<?, ?> value);
 }

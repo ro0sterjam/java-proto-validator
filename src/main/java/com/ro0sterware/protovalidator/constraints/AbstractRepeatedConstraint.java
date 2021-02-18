@@ -2,11 +2,11 @@ package com.ro0sterware.protovalidator.constraints;
 
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
-import java.util.Collection;
+import java.util.List;
 import javax.annotation.Nullable;
 
 /** Abstract constraint for repeated fields. */
-public abstract class AbstractCollectionConstraint implements FieldConstraint {
+public abstract class AbstractRepeatedConstraint implements FieldConstraint {
 
   @Override
   public boolean supportsField(Descriptors.FieldDescriptor fieldDescriptor) {
@@ -16,15 +16,14 @@ public abstract class AbstractCollectionConstraint implements FieldConstraint {
   @Override
   public boolean isValid(
       Message message, Descriptors.FieldDescriptor fieldDescriptor, @Nullable Object value) {
-    if (value == null || value instanceof Collection<?>) {
-      return isValid(message, fieldDescriptor, (Collection<?>) value);
+    // Repeated fields cannot be null
+    if (value instanceof List<?>) {
+      return isValid(message, fieldDescriptor, (List<?>) value);
     } else {
       throw new IllegalStateException("Unexpected value: " + value);
     }
   }
 
   protected abstract boolean isValid(
-      Message message,
-      Descriptors.FieldDescriptor fieldDescriptor,
-      @Nullable Collection<?> collection);
+      Message message, Descriptors.FieldDescriptor fieldDescriptor, List<?> list);
 }

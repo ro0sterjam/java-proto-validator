@@ -8,7 +8,7 @@ import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.MessageValidator;
 import com.ro0sterware.protovalidator.MessageViolation;
 import com.ro0sterware.protovalidator.ProtobufValidator;
-import com.ro0sterware.protovalidator.constraints.AbstractCollectionConstraint;
+import com.ro0sterware.protovalidator.constraints.AbstractRepeatedConstraint;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;
 import com.ro0sterware.protovalidator.exceptions.FieldConstraintNotSupportedException;
 import com.ro0sterware.protovalidator.utils.ProtoFieldUtils;
@@ -79,7 +79,7 @@ abstract class AbstractFieldConstraintTest {
 
   private MessageViolation[] getExpectedMessageViolations(String field, Object value) {
     if (value instanceof List
-        && !(getTestFieldConstraint() instanceof AbstractCollectionConstraint)) {
+        && !(getTestFieldConstraint() instanceof AbstractRepeatedConstraint)) {
       List<?> elementValues = (List) value;
       return IntStream.range(0, elementValues.size())
           .mapToObj(

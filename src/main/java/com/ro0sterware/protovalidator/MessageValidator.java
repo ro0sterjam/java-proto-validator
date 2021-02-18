@@ -4,7 +4,7 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.MapEntry;
 import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.conditions.ApplyCondition;
-import com.ro0sterware.protovalidator.constraints.AbstractCollectionConstraint;
+import com.ro0sterware.protovalidator.constraints.AbstractRepeatedConstraint;
 import com.ro0sterware.protovalidator.constraints.ConditionalFieldConstraint;
 import com.ro0sterware.protovalidator.constraints.Constraint;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;
@@ -115,7 +115,7 @@ public class MessageValidator {
 
       final Stream<MessageViolation> fieldViolations =
           fieldConstraints.stream()
-              .filter(AbstractCollectionConstraint.class::isInstance)
+              .filter(AbstractRepeatedConstraint.class::isInstance)
               .filter(constraint -> !constraint.isValid(message, fieldDescriptor, value))
               .map(constraint -> createMessageViolation(constraint, fieldPath, value));
 
@@ -127,7 +127,7 @@ public class MessageValidator {
                     final String elementPath = fieldPath + "[" + i + "]";
                     final Object elementValue = repeatedValues.get(i);
                     return fieldConstraints.stream()
-                        .filter(constraint -> !(constraint instanceof AbstractCollectionConstraint))
+                        .filter(constraint -> !(constraint instanceof AbstractRepeatedConstraint))
                         .filter(
                             constraint ->
                                 !constraint.isValid(message, fieldDescriptor, elementValue))
