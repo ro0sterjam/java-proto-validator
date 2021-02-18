@@ -7,11 +7,15 @@ import java.util.Properties;
 import javax.annotation.Nullable;
 
 /**
- * Factory for retrieving messages from `ProtobufValidationMessages.properties` under the classpath
+ * Factory for retrieving messages from `ProtobufValidationMessages.properties` and
+ * `DefaultProtobufValidationMessages.properties` under the classpath
  */
 public class ProtobufValidationMessageFactory {
 
-  private static final Properties DEFAULT_ERROR_MESSAGES = loadDefaultErrorMessages();
+  private static final Properties ERROR_MESSAGES =
+      loadDefaultErrorMessages("ProtobufValidationMessages.properties");
+  private static final Properties DEFAULT_ERROR_MESSAGES =
+      loadDefaultErrorMessages("DefaultProtobufValidationMessages.properties");
 
   private ProtobufValidationMessageFactory() {}
 
@@ -24,7 +28,9 @@ public class ProtobufValidationMessageFactory {
    */
   @Nullable
   public static String getMessage(String code, Map<String, Object> params) {
-    final String defaultErrorMessage = DEFAULT_ERROR_MESSAGES.getProperty(code + ".message");
+    final String property = code + ".message";
+    final String defaultErrorMessage =
+        ERROR_MESSAGES.getProperty(property, DEFAULT_ERROR_MESSAGES.getProperty(property));
     if (defaultErrorMessage != null) {
       // Interpolate all violation message params
       return params.entrySet().stream()
@@ -40,14 +46,15 @@ public class ProtobufValidationMessageFactory {
     return null;
   }
 
-  private static Properties loadDefaultErrorMessages() {
-    try (InputStream inputStream =
-        ClassLoader.getSystemResourceAsStream("ProtobufValidationMessages.properties")) {
+  private static Properties loadDefaultErrorMessages(String filename) {
+    try (InputStream inputStream = ClassLoader.getSystemResourceAsStream(filename)) {
       Properties prop = new Properties();
-      prop.load(inputStream);
+      if (inputStream != null) {
+        prop.load(inputStream);
+      }
       return prop;
     } catch (IOException e) {
-      throw new RuntimeException("Can't load ProtobufValidationMessages.properties", e);
+      throw new RuntimeException("Can't load " + filename, e);
     }
   }
 }
