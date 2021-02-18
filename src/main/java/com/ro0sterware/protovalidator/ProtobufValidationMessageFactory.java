@@ -13,6 +13,8 @@ public class ProtobufValidationMessageFactory {
 
   private static final Properties DEFAULT_ERROR_MESSAGES = loadDefaultErrorMessages();
 
+  private ProtobufValidationMessageFactory() {}
+
   /**
    * Get the the message with the given code interpolated with the given params.
    *

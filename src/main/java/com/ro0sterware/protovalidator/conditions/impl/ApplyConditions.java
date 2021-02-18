@@ -4,6 +4,8 @@ import com.ro0sterware.protovalidator.conditions.ApplyCondition;
 
 public class ApplyConditions {
 
+  private ApplyConditions() {}
+
   /** Syntactic sugar for ApplyCondition * */
   public static ApplyCondition when(ApplyCondition condition) {
     return condition;

@@ -4,6 +4,8 @@ import com.ro0sterware.protovalidator.constraints.FieldConstraint;
 
 public class FieldConstraints {
 
+  private FieldConstraints() {}
+
   /** Validates that a field is set */
   public static final FieldConstraint IS_SET = new IsSetConstraint();
 
