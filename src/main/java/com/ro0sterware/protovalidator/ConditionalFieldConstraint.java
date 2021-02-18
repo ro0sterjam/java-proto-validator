@@ -1,15 +1,17 @@
-package com.ro0sterware.protovalidator.constraints;
+package com.ro0sterware.protovalidator;
 
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.conditions.ApplyCondition;
+import com.ro0sterware.protovalidator.constraints.FieldConstraint;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
 import javax.annotation.Nullable;
 
 /**
- * {@link FieldConstraint} that applies only if the supplied {@link ApplyCondition} evaluates to
+ * Internal {@link FieldConstraint} that applies only if the supplied {@link ApplyCondition} evaluates to
  * true for the evaluating message.
  */
 public class ConditionalFieldConstraint implements FieldConstraint {
@@ -17,7 +19,7 @@ public class ConditionalFieldConstraint implements FieldConstraint {
   private final FieldConstraint fieldConstraint;
   private final ApplyCondition condition;
 
-  public ConditionalFieldConstraint(FieldConstraint fieldConstraint, ApplyCondition condition) {
+  ConditionalFieldConstraint(FieldConstraint fieldConstraint, ApplyCondition condition) {
     this.fieldConstraint = Objects.requireNonNull(fieldConstraint);
     this.condition = Objects.requireNonNull(condition);
   }
@@ -43,11 +45,11 @@ public class ConditionalFieldConstraint implements FieldConstraint {
     return fieldConstraint.getViolationMessageParams();
   }
 
-  public String getConditionCode() {
+  String getConditionCode() {
     return condition.getConditionCode();
   }
 
-  public Map<String, Object> getConditionMessageParams() {
+  Map<String, Object> getConditionMessageParams() {
     return condition.getConditionMessageParams();
   }
 

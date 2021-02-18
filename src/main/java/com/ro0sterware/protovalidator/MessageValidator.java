@@ -5,7 +5,6 @@ import com.google.protobuf.MapEntry;
 import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.conditions.ApplyCondition;
 import com.ro0sterware.protovalidator.constraints.AbstractRepeatedConstraint;
-import com.ro0sterware.protovalidator.constraints.ConditionalFieldConstraint;
 import com.ro0sterware.protovalidator.constraints.Constraint;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;
 import com.ro0sterware.protovalidator.constraints.MessageConstraint;
