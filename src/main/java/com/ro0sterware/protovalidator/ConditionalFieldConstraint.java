@@ -4,15 +4,14 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.conditions.ApplyCondition;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
 import javax.annotation.Nullable;
 
 /**
- * Internal {@link FieldConstraint} that applies only if the supplied {@link ApplyCondition} evaluates to
- * true for the evaluating message.
+ * Internal {@link FieldConstraint} that applies only if the supplied {@link ApplyCondition}
+ * evaluates to true for the evaluating message.
  */
 public class ConditionalFieldConstraint implements FieldConstraint {
 
