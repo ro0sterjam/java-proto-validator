@@ -68,11 +68,7 @@ class SizeConstraintTest extends AbstractFieldConstraintTest {
   Stream<Arguments> provideInvalidFieldValues() {
     return Stream.of(
         Arguments.of("repeatedStringField", Collections.singletonList("lonely")),
-        Arguments.of("repeatedStringField", Arrays.asList("but", "i", "am", "not")),
-        Arguments.of(
-            "repeatedTestNestedMessageField",
-            Collections.singletonList(
-                TestMessageOuterClass.TestNestedMessage.getDefaultInstance())));
+        Arguments.of("repeatedStringField", Arrays.asList("but", "i", "am", "not")));
   }
 
   @Override

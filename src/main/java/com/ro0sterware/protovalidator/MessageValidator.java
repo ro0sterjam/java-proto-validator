@@ -1,6 +1,7 @@
 package com.ro0sterware.protovalidator;
 
 import com.google.protobuf.Descriptors;
+import com.google.protobuf.MapEntry;
 import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.conditions.ApplyCondition;
 import com.ro0sterware.protovalidator.constraints.AbstractCollectionConstraint;
@@ -87,7 +88,27 @@ public class MessageValidator {
       @Nullable Object value,
       List<FieldConstraint> fieldConstraints,
       String fieldPath) {
-    if (fieldDescriptor.isRepeated()) {
+    if (fieldDescriptor.isMapField()) {
+      // Map fields are under the hood repeated values of MapEntry
+      if (!(value instanceof List)) {
+        throw new IllegalStateException("Field cannot be map type and have a null value");
+      }
+
+      final List<?> list = (List<?>) value;
+      // We expect map types to be a list of MapEntry
+      if (!list.isEmpty() && !(list.get(0) instanceof MapEntry)) {
+        throw new IllegalStateException("Field cannot be map type and have a non MapEntry element");
+      }
+
+      final Map<?, ?> map =
+          list.stream()
+              .map(MapEntry.class::cast)
+              .collect(Collectors.toMap(MapEntry::getKey, MapEntry::getValue));
+      return fieldConstraints.stream()
+          .filter(constraint -> !constraint.isValid(message, fieldDescriptor, map))
+          .map(constraint -> createMessageViolation(constraint, fieldPath, map));
+
+    } else if (fieldDescriptor.isRepeated()) {
       if (!(value instanceof List)) {
         throw new IllegalStateException("Field cannot be repeated and have a null value");
       }

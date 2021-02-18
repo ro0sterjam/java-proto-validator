@@ -68,6 +68,15 @@ abstract class AbstractFieldConstraintTest {
         .containsOnly(getExpectedMessageViolations(field, value));
   }
 
+  protected void setField(
+      Message.Builder messageBuilder, Descriptors.FieldDescriptor fieldDescriptor, Object value) {
+    if (value == null) {
+      messageBuilder.clearField(fieldDescriptor);
+    } else {
+      messageBuilder.setField(fieldDescriptor, value);
+    }
+  }
+
   private MessageViolation[] getExpectedMessageViolations(String field, Object value) {
     if (value instanceof List
         && !(getTestFieldConstraint() instanceof AbstractCollectionConstraint)) {
@@ -87,11 +96,9 @@ abstract class AbstractFieldConstraintTest {
   private Message createMessageWithFieldValue(String field, Object value) {
     Descriptors.FieldDescriptor fieldDescriptor =
         ProtoFieldUtils.getFieldDescriptor(getTestMessageBuilder().getDescriptorForType(), field);
-    if (value == null) {
-      return getTestMessageBuilder().clearField(fieldDescriptor).build();
-    } else {
-      return getTestMessageBuilder().setField(fieldDescriptor, value).build();
-    }
+    Message.Builder messageBuilder = getTestMessageBuilder();
+    setField(messageBuilder, fieldDescriptor, value);
+    return messageBuilder.build();
   }
 
   private ProtobufValidator createValidatorForField(String field) {

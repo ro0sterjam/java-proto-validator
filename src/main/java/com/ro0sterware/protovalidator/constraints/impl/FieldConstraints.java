@@ -4,13 +4,13 @@ import com.ro0sterware.protovalidator.constraints.FieldConstraint;
 
 public class FieldConstraints {
 
-  /** Validates that a field is set * */
+  /** Validates that a field is set */
   public static final FieldConstraint IS_SET = new IsSetConstraint();
 
   /** Validates that a field is not set */
   public static final FieldConstraint IS_NOT_SET = new IsNotSetConstraint();
 
-  /** Marks field to validate nested fields * */
+  /** Marks field to validate nested fields */
   public static final FieldConstraint VALID = new ValidConstraint();
 
   /** Validates that a number field is positive */
@@ -28,7 +28,7 @@ public class FieldConstraints {
   /** Validates that a string field is not null or blank */
   public static final FieldConstraint NOT_BLANK = new NotBlankConstraint();
 
-  /** Validates that a repeated or map field is not null or empty */
+  /** Validates that a repeated field is not null or empty */
   public static final FieldConstraint NOT_EMPTY = new NotEmptyConstraint();
 
   /** Validates that a boolean field is true */
@@ -43,28 +43,33 @@ public class FieldConstraints {
   /** Validates that a timestamp field is in the past */
   public static final FieldConstraint PAST = new PastConstraint();
 
-  /** Validates that a string field has a length within min and max inclusive * */
+  /** Validates that a string field has a length within min and max inclusive */
   public static FieldConstraint length(int min, int max) {
     return new LengthConstraint(min, max);
   }
 
-  /** Validates that a number field is less than or equal to max * */
+  /** Validates that a number field is less than or equal to max */
   public static FieldConstraint max(int max) {
     return new MaxConstraint(max);
   }
 
-  /** Validates that a number field is greater than or equal to min * */
+  /** Validates that a number field is greater than or equal to min */
   public static FieldConstraint min(int min) {
     return new MinConstraint(min);
   }
 
-  /** Validates that a string field matches the given regular expression * */
+  /** Validates that a string field matches the given regular expression */
   public static FieldConstraint pattern(String regexp) {
     return new PatternConstraint(regexp);
   }
 
-  /** Validates that a repeated or map field has a size within min and max inclusive * */
+  /** Validates that a repeated field has a size within min and max inclusive */
   public static FieldConstraint size(int min, int max) {
     return new SizeConstraint(min, max);
+  }
+
+  /** Validates that a map field has a key */
+  public static FieldConstraint hasKey(Object key) {
+    return new HasKeyConstraint(key);
   }
 }
