@@ -51,12 +51,12 @@ public class FieldConstraints {
   }
 
   /** Validates that a number field is less than or equal to max */
-  public static FieldConstraint max(int max) {
+  public static FieldConstraint max(long max) {
     return new MaxConstraint(max);
   }
 
   /** Validates that a number field is greater than or equal to min */
-  public static FieldConstraint min(int min) {
+  public static FieldConstraint min(long min) {
     return new MinConstraint(min);
   }
 

@@ -62,11 +62,11 @@ class FieldIsTrueConditionTest extends AbstractFieldConditionTest {
     Map<String, Object> conditionCodeParams = new HashMap<>();
     conditionCodeParams.put("field", field);
     return new MessageViolation(
-        "stringField",
+        getTestField(),
         new MessageViolation.ErrorMessage("field.violations.Length", errorCodeParams),
         new MessageViolation.ConditionMessage(
             "constraint.condition.FieldIsTrue", conditionCodeParams),
-        "length must be between 3 and 20 when " + field + " is true",
+        "length must be between 3 and 20 when '" + field + "' is true",
         "ab");
   }
 }

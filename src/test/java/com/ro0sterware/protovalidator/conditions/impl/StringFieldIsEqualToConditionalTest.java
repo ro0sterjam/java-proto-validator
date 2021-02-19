@@ -1,10 +1,9 @@
 package com.ro0sterware.protovalidator.conditions.impl;
 
-import com.google.protobuf.BoolValue;
 import com.google.protobuf.Message;
+import com.google.protobuf.StringValue;
 import com.ro0sterware.protovalidator.MessageViolation;
 import com.ro0sterware.protovalidator.TestMessageOuterClass;
-import com.ro0sterware.protovalidator.conditions.ApplyCondition;
 import com.ro0sterware.protovalidator.constraints.FieldConstraint;
 import com.ro0sterware.protovalidator.constraints.impl.FieldConstraints;
 import java.util.HashMap;
@@ -12,61 +11,54 @@ import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.provider.Arguments;
 
-class FieldIsNotTrueConditionTest extends AbstractFieldConditionTest {
+class StringFieldIsEqualToConditionalTest extends AbstractFieldIsEqualToConditionTest {
 
-  @Override
-  ApplyCondition getTestFieldCondition(String field) {
-    return ApplyConditions.fieldIsNotTrue(field);
-  }
-
-  @Override
-  String[] getSupportedConditionalFields() {
-    return new String[] {"boolField", "boolWrapperField"};
+  StringFieldIsEqualToConditionalTest() {
+    super("hello");
   }
 
   @Override
   Stream<Arguments> provideApplicableFieldValues() {
     return Stream.of(
-        Arguments.arguments("boolField", false),
-        Arguments.arguments("boolWrapperField", null),
-        Arguments.arguments("boolWrapperField", BoolValue.of(false)));
+        Arguments.arguments("stringField", "hello"),
+        Arguments.arguments("stringWrapperField", StringValue.of("hello")));
   }
 
   @Override
   Stream<Arguments> provideInapplicableFieldValues() {
     return Stream.of(
-        Arguments.arguments("boolField", true),
-        Arguments.arguments("boolWrapperField", BoolValue.of(true)));
+        Arguments.arguments("stringField", "world"),
+        Arguments.arguments("stringWrapperField", StringValue.of("world")));
   }
 
   @Override
   String getTestField() {
-    return "stringField";
+    return "int32Field";
   }
 
   @Override
   FieldConstraint getTestFieldConstraint() {
-    return FieldConstraints.length(3, 20);
+    return FieldConstraints.max(3L);
   }
 
   @Override
   Message.Builder getTestMessageBuilder() {
-    return TestMessageOuterClass.TestMessage.newBuilder().setStringField("ab");
+    return TestMessageOuterClass.TestMessage.newBuilder().setInt32Field(10);
   }
 
   @Override
   MessageViolation getExpectedMessageViolation(String field, Object value) {
     Map<String, Object> errorCodeParams = new HashMap<>();
-    errorCodeParams.put("min", 3);
-    errorCodeParams.put("max", 20);
+    errorCodeParams.put("max", 3L);
     Map<String, Object> conditionCodeParams = new HashMap<>();
     conditionCodeParams.put("field", field);
+    conditionCodeParams.put("value", "hello");
     return new MessageViolation(
         getTestField(),
-        new MessageViolation.ErrorMessage("field.violations.Length", errorCodeParams),
+        new MessageViolation.ErrorMessage("field.violations.Max", errorCodeParams),
         new MessageViolation.ConditionMessage(
-            "constraint.condition.FieldIsNotTrue", conditionCodeParams),
-        "length must be between 3 and 20 when '" + field + "' is not true",
-        "ab");
+            "constraint.condition.FieldIsEqualTo", conditionCodeParams),
+        "must be less than or equal to 3 when '" + field + "' is equal to " + "hello",
+        10);
   }
 }

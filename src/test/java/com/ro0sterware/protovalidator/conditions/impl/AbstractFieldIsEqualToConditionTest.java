@@ -1,6 +1,5 @@
 package com.ro0sterware.protovalidator.conditions.impl;
 
-import com.google.protobuf.BoolValue;
 import com.google.protobuf.Message;
 import com.ro0sterware.protovalidator.MessageViolation;
 import com.ro0sterware.protovalidator.TestMessageOuterClass;
@@ -9,34 +8,54 @@ import com.ro0sterware.protovalidator.constraints.FieldConstraint;
 import com.ro0sterware.protovalidator.constraints.impl.FieldConstraints;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
-import org.junit.jupiter.params.provider.Arguments;
 
-class FieldIsNotTrueConditionTest extends AbstractFieldConditionTest {
+abstract class AbstractFieldIsEqualToConditionTest extends AbstractFieldConditionTest {
+
+  private final Object value;
+
+  protected AbstractFieldIsEqualToConditionTest(Object value) {
+    this.value = value;
+  }
 
   @Override
   ApplyCondition getTestFieldCondition(String field) {
-    return ApplyConditions.fieldIsNotTrue(field);
+    return ApplyConditions.fieldIsEqualTo(field, value);
   }
 
   @Override
   String[] getSupportedConditionalFields() {
-    return new String[] {"boolField", "boolWrapperField"};
-  }
-
-  @Override
-  Stream<Arguments> provideApplicableFieldValues() {
-    return Stream.of(
-        Arguments.arguments("boolField", false),
-        Arguments.arguments("boolWrapperField", null),
-        Arguments.arguments("boolWrapperField", BoolValue.of(false)));
-  }
-
-  @Override
-  Stream<Arguments> provideInapplicableFieldValues() {
-    return Stream.of(
-        Arguments.arguments("boolField", true),
-        Arguments.arguments("boolWrapperField", BoolValue.of(true)));
+    return new String[] {
+      "testEnumField",
+      "testNestedMessageField",
+      "timestampField",
+      "durationField",
+      "doubleField",
+      "floatField",
+      "boolField",
+      "stringField",
+      "int32Field",
+      "uint32Field",
+      "fixed32Field",
+      "int64Field",
+      "uint64Field",
+      "fixed64Field",
+      "sint32Field",
+      "sint64Field",
+      "sfixed32Field",
+      "sfixed64Field",
+      "bytesField",
+      "doubleWrapperField",
+      "floatWrapperField",
+      "int64WrapperField",
+      "uint64WrapperField",
+      "int32WrapperField",
+      "uint32WrapperField",
+      "boolWrapperField",
+      "stringWrapperField",
+      "bytesWrapperField",
+      "firstOneofField",
+      "secondOneofField",
+    };
   }
 
   @Override
@@ -61,12 +80,13 @@ class FieldIsNotTrueConditionTest extends AbstractFieldConditionTest {
     errorCodeParams.put("max", 20);
     Map<String, Object> conditionCodeParams = new HashMap<>();
     conditionCodeParams.put("field", field);
+    conditionCodeParams.put("value", this.value);
     return new MessageViolation(
         getTestField(),
         new MessageViolation.ErrorMessage("field.violations.Length", errorCodeParams),
         new MessageViolation.ConditionMessage(
-            "constraint.condition.FieldIsNotTrue", conditionCodeParams),
-        "length must be between 3 and 20 when '" + field + "' is not true",
+            "constraint.condition.FieldIsEqualTo", conditionCodeParams),
+        "length must be between 3 and 20 when '" + field + "' is equal to " + this.value,
         "ab");
   }
 }
