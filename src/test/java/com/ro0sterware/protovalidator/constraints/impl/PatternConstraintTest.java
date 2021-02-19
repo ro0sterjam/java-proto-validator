@@ -30,7 +30,8 @@ class PatternConstraintTest extends AbstractFieldConstraintTest {
       "firstOneofField",
       "stringWrapperField",
       "repeatedStringField",
-      "repeatedStringWrapperField"
+      "repeatedStringWrapperField",
+      "conditionalField"
     };
   }
 

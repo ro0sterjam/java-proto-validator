@@ -68,6 +68,7 @@ message TestMessage {
     repeated google.protobuf.Timestamp repeated_timestamp_field = 57;
     repeated google.protobuf.Duration repeated_duration_field = 58;
     map<string, TestNestedMessage> map_field = 59;
+    string conditional_field = 60;
 }
 
 enum TestEnum {

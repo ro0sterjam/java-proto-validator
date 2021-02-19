@@ -30,7 +30,8 @@ class LengthConstraintTest extends AbstractFieldConstraintTest {
       "firstOneofField",
       "stringWrapperField",
       "repeatedStringField",
-      "repeatedStringWrapperField"
+      "repeatedStringWrapperField",
+      "conditionalField"
     };
   }
 
