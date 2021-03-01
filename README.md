@@ -3,8 +3,6 @@
 ## Usage
 
 ```
-  @Bean
-  @Nonnull
   public ProtobufValidator protoValidator() {
     return ProtobufValidator.createBuilder()
         .registerValidator(
